@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Sentiment & Bias Gauges",
+  "description": "Parses visible page text and overlays positivity and political spectrum gauges using the open-source AFINN sentiment model.",
+  "version": "1.1.0",
+  "permissions": [],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "scripts/transformersLoader.js",
+        "scripts/afinnLexicon.js",
+        "scripts/multilingualSentiment.js",
+        "scripts/politicalBiasAnalyzer.js",
+        "scripts/contentScript.js"
+      ],
+      "css": [
+        "styles/panel.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "vendor/transformers.min.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
+
