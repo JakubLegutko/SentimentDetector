@@ -1,19 +1,22 @@
 {
   "manifest_version": 3,
-  "name": "Sentiment & Bias Gauges",
-  "description": "Parses visible page text and overlays positivity and political spectrum gauges using the open-source AFINN sentiment model.",
-  "version": "1.1.0",
+  "name": "Objectivity Gauge",
+  "description": "Analyzes the objectivity of text using a switchable BERT-based model or a lexicon fallback.",
+  "version": "2.1.0",
   "permissions": [],
+  "host_permissions": [
+    "https://huggingface.co/*"
+  ],
   "content_scripts": [
     {
       "matches": [
         "<all_urls>"
       ],
       "js": [
+        "vendor/vader.js",
         "scripts/transformersLoader.js",
-        "scripts/afinnLexicon.js",
-        "scripts/multilingualSentiment.js",
-        "scripts/politicalBiasAnalyzer.js",
+        "scripts/newLexicon.js",
+        "scripts/objectivityAnalyzer.js",
         "scripts/contentScript.js"
       ],
       "css": [
@@ -30,7 +33,11 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "vendor/transformers.min.js"
+        "vendor/transformers.min.js",
+        "vendor/vader.js",
+        "models/*",
+        "models/distilbert-subjectivity/*",
+        "models/distilbert-subjectivity/onnx/*"
       ],
       "matches": [
         "<all_urls>"
@@ -38,4 +45,3 @@
     }
   ]
 }
-

@@ -1,123 +1,35 @@
+
 (function () {
-  if (window.__sentimentBiasGaugesInjected || !document.body) {
+  const newLexiconScript = document.createElement('script');
+  newLexiconScript.src = chrome.runtime.getURL('scripts/newLexicon.js');
+  document.head.appendChild(newLexiconScript);
+
+  if (window.__objectivityGaugeInjected || !document.body) {
     return;
   }
-  window.__sentimentBiasGaugesInjected = true;
+  window.__objectivityGaugeInjected = true;
 
   const MAX_TEXT_LENGTH = 20000;
-  const SENTENCE_SPLIT_REGEX = /(?<=[.!?])\s+/;
   const TOKEN_REGEX = /\p{L}[\p{L}'-]+/gu;
-  const MAX_PHRASE_LENGTH = 3;
-  const ENGLISH_LANG_CODES = new Set(["en", "en-us", "en-gb"]);
-  const SENTIMENT_SENSITIVITY = 1.35;
-  const POLITICAL_SENSITIVITY = 1.4;
 
-  const POLITICAL_LEXICON = {
-    left: {
-      weight: 1,
-      phrases: [
-        "climate justice",
-        "wealth tax",
-        "green new deal",
-        "racial equity",
-        "universal healthcare",
-        "labor union",
-        "collective bargaining",
-        "social safety net",
-        "living wage",
-        "regulation",
-        "redistribution",
-        "public option"
-      ],
-      unigrams: [
-        "equity",
-        "union",
-        "solidarity",
-        "progressive",
-        "sustainability",
-        "inclusive",
-        "redistribute",
-        "taxation",
-        "regulate",
-        "diversity",
-        "activism",
-        "collective",
-        "public",
-        "welfare"
-      ]
-    },
-    right: {
-      weight: 1,
-      phrases: [
-        "free market",
-        "gun rights",
-        "border security",
-        "law and order",
-        "fiscal conservatism",
-        "school choice",
-        "limited government",
-        "national sovereignty",
-        "pro life",
-        "tax cuts",
-        "strong defense",
-        "traditional values"
-      ],
-      unigrams: [
-        "patriotism",
-        "liberty",
-        "conservative",
-        "freedom",
-        "heritage",
-        "capitalism",
-        "faith",
-        "traditional",
-        "constitution",
-        "security",
-        "entrepreneurial",
-        "border",
-        "defense",
-        "deregulation"
-      ]
-    }
-  };
-
-  const STOPWORDS = new Set([
-    "the",
-    "a",
-    "an",
-    "and",
-    "or",
-    "but",
-    "with",
-    "to",
-    "of",
-    "for",
-    "on",
-    "in",
-    "that",
-    "this",
-    "it",
-    "is",
-    "are",
-    "be",
-    "as",
-    "at",
-    "by",
-    "from"
-  ]);
-
-  let lastDetectedLanguage = "en";
+  let lastAnalysis = null;
 
   const ui = createPanel();
-  let lastSignature = "";
-  let updateCounter = 0;
-  let selectionState = null;
-  let lastAnalysis = null;
+
+  // --- Event Listeners ---
 
   if (ui.selectionButton) {
     ui.selectionButton.addEventListener("click", () => {
       handleSelectionAnalysis().catch((error) => {
-        console.error("Selection sentiment analysis failed", error);
+        console.error("Selection analysis failed", error);
+      });
+    });
+  }
+
+  if (ui.pageButton) {
+    ui.pageButton.addEventListener("click", () => {
+      handlePageAnalysis().catch((error) => {
+        console.error("Page analysis failed", error);
       });
     });
   }
@@ -128,143 +40,200 @@
       const nextState = !expanded;
       ui.detailsButton.dataset.expanded = String(nextState);
       ui.detailsButton.textContent = nextState ? "Hide" : "Why?";
-      ui.detailsButton.setAttribute("aria-pressed", String(nextState));
       ui.panel.classList.toggle("details-open", nextState);
       if (nextState) {
-        if (lastAnalysis) {
-          updateAnalysisDetails(lastAnalysis);
-        } else {
-          updateAnalysisDetails(null);
-        }
+        updateAnalysisDetails(lastAnalysis);
       }
     });
   }
 
-  const debouncedUpdate = debounce(() => {
-    const runId = ++updateCounter;
-    runAutomaticAnalysis(runId).catch((error) => {
-      console.error("Sentiment Gauges failed to update", error);
+  if (ui.modelSelector) {
+    ui.modelSelector.addEventListener("change", (e) => {
+      const newModel = e.target.value;
+      setPanelStatus("Switching model...");
+
+      if (newModel === 'vader') {
+        if (!window.vader) {
+          setPanelStatus("Vader not found");
+          console.error("Vader global missing despite static load.");
+        } else {
+          setPanelStatus("Model loaded");
+        }
+        return;
+      }
+
+      window.ObjectivityAnalyzer.setModel(newModel)
+        .then(() => {
+          setPanelStatus("Model loaded");
+        })
+        .catch((err) => {
+          setPanelStatus("Model load failed");
+          console.error(err);
+        });
     });
-  }, 900);
+  }
 
-  debouncedUpdate();
+  // --- Analysis Logic ---
 
-  const observer = new MutationObserver(() => debouncedUpdate());
-  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
-  window.addEventListener("scroll", debouncedUpdate, { passive: true });
-  window.addEventListener("visibilitychange", () => {
-    if (!document.hidden) {
-      debouncedUpdate();
-    }
-  });
-
-  async function runAutomaticAnalysis(runId) {
+  async function handlePageAnalysis() {
     const rawText = extractVisibleText();
+
     if (!rawText.trim()) {
-      lastSignature = "";
-      setPanelStatus("Waiting for readable text...");
+      setPanelStatus("No readable content found.");
       return;
     }
-    const signature = `${rawText.length}:${rawText.slice(0, 120)}`;
-    if (signature === lastSignature) {
-      return;
-    }
-    lastSignature = signature;
 
     setPanelStatus("Analyzing page...");
-    const { sentimentResult, politicalResult, contextResult } = await analyzeText(rawText, {
-      updateBadge: true
-    });
 
-    if (runId !== updateCounter) {
-      return;
-    }
+    const result = await analyzeObjectivity(rawText);
 
-    updatePositivityGauge(ui.positivity, sentimentResult, contextResult);
-    updatePoliticalGauge(ui.political, politicalResult, contextResult);
-    lastAnalysis = { sentimentResult, politicalResult, contextResult };
+    updateGauge(ui.objectivityGauge, result);
+    lastAnalysis = { result, text: rawText };
+
     if (ui.panel.classList.contains("details-open")) {
       updateAnalysisDetails(lastAnalysis);
     }
   }
 
-  async function analyzeText(rawText, { updateBadge = false, preferredLanguage } = {}) {
-    const detectedLanguage =
-      preferredLanguage || detectLanguage(rawText) || lastDetectedLanguage || "en";
-    if (updateBadge) {
-      updateLanguageBadge(detectedLanguage);
-    }
-    lastDetectedLanguage = detectedLanguage;
-
-    const normalizedText = rawText.toLowerCase();
-    const tokens = tokenize(normalizedText);
-
-    let sentimentResult;
-    let provider = "lexicon";
-
-    if (!isEnglish(detectedLanguage) && isMultilingualAvailable()) {
+  async function analyzeObjectivity(text) {
+    // Auto-translation step
+    if (window.ObjectivityAnalyzer && window.ObjectivityAnalyzer.translate) {
       try {
-        sentimentResult = await window.MultilingualSentiment.analyze(rawText, detectedLanguage);
-        provider = "transformer";
-      } catch (error) {
-        console.warn("Multilingual sentiment failed; falling back to lexicon", error);
-        sentimentResult = scoreSentiment(tokens, normalizedText);
-        provider = "lexicon-fallback";
+        const translated = await window.ObjectivityAnalyzer.translate(text);
+        if (translated !== text) {
+          console.log("Text translated for analysis:", translated);
+          text = translated; // Swap text for the English version
+        }
+      } catch (e) {
+        console.warn("Auto-translation failed, proceeding with original text", e);
       }
-    } else {
-      sentimentResult = scoreSentiment(tokens, normalizedText);
     }
 
-    const politicalResult = await analyzePoliticalOrientation({
-      text: rawText,
-      tokens,
-      language: detectedLanguage
-    });
-    const contextResult = {
-      ...buildContextSummary(rawText),
-      language: detectedLanguage,
-      provider
-    };
+    const modelKey = ui.modelSelector.value;
+    if (modelKey === 'vader') {
+      // window.vader should be available.
+      if (!window.vader) {
+        throw new Error("Vader library not loaded");
+      }
+      const result = window.vader.SentimentIntensityAnalyzer.polarity_scores(text);
 
-    return { sentimentResult, politicalResult, contextResult };
+      // Objectivity points.
+      // Compound is -1 to 1.
+      // Emotional (Subjective) = High Abs(Compound).
+      // Neutral (Objective) = 0.
+      // Score: (0.5 - abs(compound)) * 200.
+      // if 0 -> 100 pts (Objective).
+      // if 1 -> -100 pts (Subjective).
+      const score = (0.5 - Math.abs(result.compound)) * 200;
+
+      // Identify contributing words
+      const lexicon = window.vader.SentimentIntensityAnalyzer.LEXICON;
+      const tokens = (text.match(TOKEN_REGEX) || []).map(t => t.toLowerCase());
+      const subjectiveWords = [];
+      let subjectiveCount = 0;
+
+      tokens.forEach(token => {
+        if (lexicon && lexicon[token] !== undefined) {
+          subjectiveCount++;
+          if (subjectiveWords.length < 15 && !subjectiveWords.includes(token)) {
+            subjectiveWords.push(token);
+          }
+        }
+      });
+
+      return {
+        score: score,
+        label: score > 0 ? "Objective" : "Subjective",
+        confidence: Math.abs(score),
+        model: "Vader",
+        provider: "lexicon",
+        lexiconStats: {
+          subjectiveWords: subjectiveWords,
+          subjectiveCount: subjectiveCount,
+          totalCount: tokens.length
+        }
+      }
+    }
+    // 1. Try Transformer Model
+    if (window.ObjectivityAnalyzer) {
+      try {
+        const result = await window.ObjectivityAnalyzer.analyze(text);
+        return {
+          ...result,
+          lexiconStats: scoreObjectivityLexicon(text)
+        };
+      } catch (e) {
+        console.warn("Model unavailable, falling back to lexicon", e);
+      }
+    }
+
+    // 2. Fallback to Lexicon
+    const lexResult = scoreObjectivityLexicon(text);
+    // lexResult.objectivityScore is 0..1+ (0.5 neutral)
+    const fallBackScore = (lexResult.objectivityScore - 0.5) * 200;
+
+    return {
+      score: fallBackScore,
+      label: fallBackScore > 0 ? "Objective" : "Subjective",
+      confidence: Math.abs(fallBackScore),
+      model: "Lexicon (Fallback)",
+      provider: "lexicon",
+      lexiconStats: lexResult
+    };
+  }
+
+
+
+  function scoreObjectivityLexicon(text) {
+    const tokens = (text.match(TOKEN_REGEX) || []).map(t => t.toLowerCase());
+    if (tokens.length === 0) return { objectivityScore: 0.5, subjectiveCount: 0, totalCount: 0, subjectiveWords: [] };
+
+    let score = 0;
+    const subjectiveWords = [];
+    const lexicon = window.subjectivityLexicon || new Map();
+
+    tokens.forEach(token => {
+      if (lexicon.has(token)) {
+        score += lexicon.get(token);
+        if (subjectiveWords.length < 5) subjectiveWords.push(token);
+      }
+    });
+
+    const objectivityScore = Math.max(0, 0.5 + (score / tokens.length));
+
+    return {
+      objectivityScore,
+      subjectiveCount: subjectiveWords.length,
+      totalCount: tokens.length,
+      subjectiveWords
+    };
   }
 
   async function handleSelectionAnalysis() {
     const selectedText = getSelectionText();
     if (!selectedText) {
-      renderSelectionReport({ error: "Select some text on the page first." });
+      renderSelectionReport({ error: "Select text first." });
       return;
     }
 
     renderSelectionReport({ loading: true });
-    const originalLabel = ui.selectionButton?.textContent;
-    if (ui.selectionButton) {
-      ui.selectionButton.disabled = true;
-      ui.selectionButton.textContent = "…";
-    }
 
     try {
-      const { sentimentResult, politicalResult, contextResult } = await analyzeText(selectedText, {
-        preferredLanguage: lastDetectedLanguage
-      });
-      renderSelectionReport({
-        sentimentResult,
-        politicalResult,
-        contextResult,
-        text: selectedText
-      });
-    } catch (error) {
-      console.error("Selection analysis failed", error);
-      renderSelectionReport({
-        error: "Unable to analyze the selected text. Please try again."
-      });
-    } finally {
-      if (ui.selectionButton) {
-        ui.selectionButton.disabled = false;
-        ui.selectionButton.textContent = originalLabel || "Sel";
+      const result = await analyzeObjectivity(selectedText);
+      renderSelectionReport({ result, text: selectedText });
+      updateGauge(ui.objectivityGauge, result);
+
+      lastAnalysis = { result, text: selectedText };
+      if (ui.panel.classList.contains("details-open")) {
+        updateAnalysisDetails(lastAnalysis);
       }
+
+    } catch (error) {
+      renderSelectionReport({ error: "Analysis failed." });
     }
   }
+
+  // --- HTML Extraction & Filtering ---
 
   function extractVisibleText() {
     const primaryNode = findPrimaryContentNode();
@@ -321,10 +290,12 @@
       ".ads",
       ".promo",
       ".modal",
-      ".popup"
+      ".popup",
+      "#comments",
+      ".comments"
     ];
 
-    ["script", "style", "noscript", "template"].forEach((tag) => {
+    ["script", "style", "noscript", "template", "iframe", "svg"].forEach((tag) => {
       clone.querySelectorAll(tag).forEach((el) => el.remove());
     });
     NOISE_SELECTORS.forEach((selector) => {
@@ -335,568 +306,167 @@
     return text.replace(/\s+/g, " ").trim();
   }
 
-  function tokenize(text) {
-    const tokens = text.match(TOKEN_REGEX) || [];
-    return tokens.map((token) => token.toLowerCase());
+  function getSelectionText() {
+    return window.getSelection().toString().trim();
   }
 
-  function scoreSentiment(tokens, text) {
-    if (!tokens.length) {
-      return {
-        normalized: 0.5,
-        aggregate: 0,
-        matches: 0,
-        sampleSentences: [],
-        descriptor: "Neutral"
-      };
-    }
-    const { score, matches } = computeLexiconScore(tokens);
-
-    const baseNormalized = matches ? clamp((score / (matches * 5) + 1) / 2, 0, 1) : 0.5;
-    const normalized = applySensitivity(baseNormalized, SENTIMENT_SENSITIVITY);
-    const descriptor =
-      normalized > 0.62 ? "Positive" : normalized < 0.38 ? "Negative" : "Neutral";
-
-    const sampleSentences = extractChargedSentences(text, 3);
-
-    return {
-      normalized,
-      aggregate: score,
-      matches,
-      descriptor,
-      sampleSentences
-    };
-  }
-
-  function scorePoliticalOrientationLex(tokens) {
-    if (!tokens.length) {
-      return {
-        normalized: 0.5,
-        descriptor: "Center",
-        leftScore: 0,
-        rightScore: 0,
-        provider: "lexicon"
-      };
-    }
-    let leftScore = 0;
-    let rightScore = 0;
-
-    const joinedTokens = tokens.join(" ");
-
-    POLITICAL_LEXICON.left.phrases.forEach((phrase) => {
-      const count = countOccurrences(joinedTokens, phrase);
-      leftScore += count * 2;
-    });
-
-    POLITICAL_LEXICON.right.phrases.forEach((phrase) => {
-      const count = countOccurrences(joinedTokens, phrase);
-      rightScore += count * 2;
-    });
-
-    tokens.forEach((token) => {
-      if (POLITICAL_LEXICON.left.unigrams.includes(token)) {
-        leftScore += 1;
-      } else if (POLITICAL_LEXICON.right.unigrams.includes(token)) {
-        rightScore += 1;
-      }
-    });
-
-    const total = leftScore + rightScore;
-    const balance = total ? (rightScore - leftScore) / total : 0;
-    const baseNormalized = clamp(balance / 2 + 0.5, 0, 1);
-    const normalized = applySensitivity(baseNormalized, POLITICAL_SENSITIVITY);
-    let descriptor = "Center";
-    if (normalized > 0.58) descriptor = "Right leaning";
-    else if (normalized < 0.42) descriptor = "Left leaning";
-
-    return { normalized, descriptor, leftScore, rightScore, provider: "lexicon" };
-  }
-
-  function buildContextSummary(text) {
-    const sentences = (text.match(SENTENCE_SPLIT_REGEX) ? text.split(SENTENCE_SPLIT_REGEX) : [text])
-      .map((sentence) => sentence.trim())
-      .filter(Boolean);
-
-    const wordCount = text.split(/\s+/).filter(Boolean).length;
-    const topKeywords = extractTopKeywords(text);
-
-    return {
-      sentences,
-      wordCount,
-      topKeywords
-    };
-  }
-
-  function extractChargedSentences(text, limit = 2) {
-    const sentences = text
-      .split(SENTENCE_SPLIT_REGEX)
-      .map((sentence) => sentence.trim())
-      .filter((sentence) => sentence.length > 0);
-    const scored = sentences
-      .map((sentence) => {
-        const lower = sentence.toLowerCase();
-        const tokens = tokenize(lower);
-        const { score } = computeLexiconScore(tokens);
-        return { sentence, weight: Math.abs(score) };
-      })
-      .sort((a, b) => b.weight - a.weight)
-      .slice(0, limit);
-    return scored.map((entry) => entry.sentence);
-  }
-
-  function computeLexiconScore(tokens) {
-    let score = 0;
-    let matches = 0;
-    for (let i = 0; i < tokens.length; i += 1) {
-      let matched = false;
-      for (let window = Math.min(MAX_PHRASE_LENGTH, tokens.length - i); window > 1; window -= 1) {
-        const phrase = tokens.slice(i, i + window).join(" ");
-        const lexScore = AFINN_LEXICON[phrase];
-        if (lexScore !== undefined) {
-          score += lexScore;
-          matches += 1;
-          i += window - 1;
-          matched = true;
-          break;
-        }
-      }
-      if (!matched) {
-        const lexScore = AFINN_LEXICON[tokens[i]];
-        if (lexScore !== undefined) {
-          score += lexScore;
-          matches += 1;
-        }
-      }
-    }
-    return { score, matches };
-  }
-
-  function extractTopKeywords(text) {
-    const counts = new Map();
-    const tokens = tokenize(text);
-    tokens.forEach((token) => {
-      if (STOPWORDS.has(token) || token.length < 4) return;
-      counts.set(token, (counts.get(token) || 0) + 1);
-    });
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 4)
-      .map(([token, count]) => `${token} (${count})`);
-  }
-
-  async function analyzePoliticalOrientation({ text, tokens }) {
-    if (typeof window.PoliticalBiasAnalyzer?.classify === "function") {
-      try {
-        const result = await window.PoliticalBiasAnalyzer.classify(text);
-        return {
-          normalized: applySensitivity(result.normalized, POLITICAL_SENSITIVITY),
-          descriptor: result.descriptor,
-          provider: result.provider,
-          confidence: result.confidence,
-          distribution: result.distribution
-        };
-      } catch (error) {
-        console.warn("Political bias transformer failed; falling back to lexicon", error);
-      }
-    }
-    return scorePoliticalOrientationLex(tokens);
-  }
+  // --- UI Helpers ---
 
   function createPanel() {
     const panel = document.createElement("section");
     panel.id = "sentiment-detector-panel";
-    panel.classList.add("sentiment-detector-fade-enter", "sentiment-detector-fade-enter-active");
 
     const header = document.createElement("div");
     header.className = "panel-header";
 
     const titleBlock = document.createElement("div");
     titleBlock.className = "panel-title-block";
-    const title = document.createElement("h1");
-    title.textContent = "Sentiment Gauges";
-    const subtitle = document.createElement("p");
-    subtitle.className = "subtitle";
-    subtitle.textContent = "Live analysis of visible text";
-    titleBlock.appendChild(title);
-    titleBlock.appendChild(subtitle);
+    titleBlock.innerHTML = "<h1>Objectivity</h1>";
 
     const actions = document.createElement("div");
     actions.className = "panel-actions";
-    const languageBadge = document.createElement("span");
-    languageBadge.className = "language-badge";
-    languageBadge.textContent = "EN";
-    languageBadge.title = "Detected language: EN";
+
+    const modelSelector = document.createElement("select");
+    modelSelector.className = "model-selector";
+    if (window.ObjectivityAnalyzer) {
+      const models = window.ObjectivityAnalyzer.getAvailableModels();
+      Object.keys(models).forEach(key => {
+        const opt = document.createElement("option");
+        opt.value = key;
+        opt.textContent = models[key].name.split(" ")[0];
+        modelSelector.appendChild(opt);
+      });
+    }
+    const vaderOption = document.createElement("option");
+    vaderOption.value = "vader";
+    vaderOption.textContent = "Vader";
+    modelSelector.appendChild(vaderOption);
 
     const detailsButton = document.createElement("button");
-    detailsButton.type = "button";
     detailsButton.className = "panel-action";
     detailsButton.textContent = "Why?";
-    detailsButton.title = "Show reasoning behind the gauges";
-    detailsButton.dataset.expanded = "false";
+
+    const pageButton = document.createElement("button");
+    pageButton.className = "panel-action";
+    pageButton.textContent = "Page";
+    pageButton.title = "Analyze main page content";
 
     const selectionButton = document.createElement("button");
-    selectionButton.type = "button";
     selectionButton.className = "panel-action";
     selectionButton.textContent = "Sel";
-    selectionButton.title = "Analyze the currently highlighted text";
+    selectionButton.title = "Analyze selected text";
 
     const toggleButton = document.createElement("button");
-    toggleButton.type = "button";
     toggleButton.className = "panel-toggle";
-    toggleButton.setAttribute("aria-label", "Minimize sentiment gauges");
-    toggleButton.setAttribute("aria-expanded", "true");
     toggleButton.textContent = "–";
-    toggleButton.addEventListener("click", () => {
-      const collapsed = panel.classList.toggle("collapsed");
-      toggleButton.textContent = collapsed ? "+" : "–";
-      toggleButton.setAttribute(
-        "aria-label",
-        collapsed ? "Expand sentiment gauges" : "Minimize sentiment gauges"
-      );
-      toggleButton.setAttribute("aria-expanded", String(!collapsed));
-    });
-    actions.appendChild(languageBadge);
-    actions.appendChild(detailsButton);
-    actions.appendChild(selectionButton);
-    actions.appendChild(toggleButton);
+    toggleButton.onclick = () => {
+      panel.classList.toggle("collapsed");
+      toggleButton.textContent = panel.classList.contains("collapsed") ? "+" : "–";
+    };
 
-    header.appendChild(titleBlock);
-    header.appendChild(actions);
+    actions.append(modelSelector, detailsButton, pageButton, selectionButton, toggleButton);
+    header.append(titleBlock, actions);
 
     const body = document.createElement("div");
     body.className = "panel-body";
 
-    const positivityRow = createGaugeRow({
-      title: "Positivity",
-      legend: "Negative ↔ Positive"
-    });
-    const politicalRow = createGaugeRow({
-      title: "Political spectrum",
-      legend: "Left ↔ Right"
-    });
-
-    body.appendChild(positivityRow.row);
-    body.appendChild(politicalRow.row);
+    const gaugeRow = createGaugeRow({ title: "", legend: "Subj ↔ Obj" });
+    body.appendChild(gaugeRow.row);
 
     const selectionReport = document.createElement("div");
     selectionReport.className = "selection-report";
-    selectionReport.innerHTML =
-      '<div class="selection-message">Highlight text and click "Sel" to analyze a snippet.</div>';
 
     const analysisDetails = document.createElement("div");
     analysisDetails.className = "analysis-details";
-    analysisDetails.innerHTML =
-      '<div class="details-message">Run an analysis to see contributing sentences, keywords, and political cues.</div>';
 
-    panel.appendChild(header);
-    panel.appendChild(body);
-    panel.appendChild(selectionReport);
-    panel.appendChild(analysisDetails);
+    panel.append(header, body, selectionReport, analysisDetails);
     document.body.appendChild(panel);
 
     return {
-      panel,
-      body,
-      toggleButton,
-      languageBadge,
-      detailsButton,
-      selectionButton,
-      selectionReport,
-      analysisDetails,
-      positivity: positivityRow,
-      political: politicalRow
+      panel, modelSelector, detailsButton, pageButton, selectionButton,
+      objectivityGauge: gaugeRow, selectionReport, analysisDetails
     };
-  }
-
-  function setPanelStatus(message) {
-    ui.positivity.status.textContent = message;
-    ui.political.status.textContent = message;
-  }
-
-  function updateLanguageBadge(language) {
-    if (!ui.languageBadge) return;
-    const label = (language || "en").toUpperCase();
-    ui.languageBadge.textContent = label;
-    ui.languageBadge.title = `Detected language: ${label}`;
   }
 
   function createGaugeRow({ title, legend }) {
     const row = document.createElement("div");
     row.className = "sentiment-row";
-
-    const label = document.createElement("label");
-    const titleSpan = document.createElement("span");
-    titleSpan.textContent = title;
-    const legendSpan = document.createElement("span");
-    legendSpan.textContent = legend;
-    label.appendChild(titleSpan);
-    label.appendChild(legendSpan);
-
-    const gauge = document.createElement("div");
-    gauge.className = "gauge";
-    const fill = document.createElement("div");
-    fill.className = "gauge-fill";
-    const indicator = document.createElement("div");
-    indicator.className = "gauge-indicator";
-    indicator.textContent = "•";
-
-    gauge.appendChild(fill);
-    gauge.appendChild(indicator);
-
-    const status = document.createElement("small");
-    status.className = "context";
-    status.textContent = "Collecting text...";
-
-    row.appendChild(label);
-    row.appendChild(gauge);
-    row.appendChild(status);
-
-    return { row, fill, indicator, status };
-  }
-
-  function updatePositivityGauge(elements, result, context) {
-    const width = Math.round(result.normalized * 100);
-    elements.fill.style.width = `${width}%`;
-    elements.fill.style.background =
-      result.normalized >= 0.5
-        ? "linear-gradient(90deg, #34d399, #10b981)"
-        : "linear-gradient(90deg, #f87171, #ef4444)";
-    elements.indicator.style.left = `${width}%`;
-    elements.indicator.textContent = `${Math.round((result.normalized - 0.5) * 200)}%`;
-    const confidenceLabel =
-      context.provider === "transformer" && typeof result.aggregate === "number"
-        ? `conf: ${(result.aggregate * 100).toFixed(0)}%`
-        : `matches: ${result.matches}`;
-    elements.status.textContent = [
-      `${result.descriptor} • ${confidenceLabel}`,
-      context.wordCount ? `${context.wordCount} words processed` : "",
-      context.language ? `lang: ${context.language.toUpperCase()}` : "",
-      context.provider ? `model: ${context.provider}` : "",
-      context.topKeywords.length ? `focus: ${context.topKeywords.join(", ")}` : ""
-    ]
-      .filter(Boolean)
-      .join(" · ");
-  }
-
-  function updatePoliticalGauge(elements, result, context) {
-    const width = Math.round(result.normalized * 100);
-    elements.fill.style.width = `${width}%`;
-    elements.fill.style.background = "linear-gradient(90deg, #60a5fa, #f87171)";
-    elements.indicator.style.left = `${width}%`;
-    elements.indicator.textContent = result.descriptor;
-    const distributionText = result.distribution
-      ? `L:${formatPercent(result.distribution["Left leaning"])} C:${formatPercent(
-          result.distribution.Center
-        )} R:${formatPercent(result.distribution["Right leaning"])}`
-      : `Left refs: ${result.leftScore} · Right refs: ${result.rightScore}`;
-    elements.status.textContent = [
-      distributionText,
-      result.provider ? `model: ${result.provider}` : "",
-      result.confidence ? `conf: ${Math.round(result.confidence * 100)}%` : "",
-      context.language ? `lang: ${context.language.toUpperCase()}` : "",
-      context.topKeywords.length ? `focus: ${context.topKeywords.join(", ")}` : ""
-    ]
-      .filter(Boolean)
-      .join(" · ");
-  }
-
-  function renderSelectionReport(state) {
-    selectionState = state;
-    if (!ui.selectionReport) return;
-
-    if (!state) {
-      ui.selectionReport.innerHTML =
-        '<div class="selection-message">Highlight text and click "Sel" to analyze a snippet.</div>';
-      return;
-    }
-
-    if (state.loading) {
-      ui.selectionReport.innerHTML =
-        '<div class="selection-message">Analyzing highlighted text…</div>';
-      return;
-    }
-
-    if (state.error) {
-      ui.selectionReport.innerHTML = `<div class="selection-message selection-error">${state.error}</div>`;
-      return;
-    }
-
-    const { sentimentResult, politicalResult, contextResult, text } = state;
-    const positivityPercent = Math.round(sentimentResult.normalized * 100);
-    const metaParts = [];
-    if (contextResult.language) metaParts.push(`Lang: ${contextResult.language.toUpperCase()}`);
-    if (contextResult.provider) metaParts.push(`Model: ${contextResult.provider}`);
-    if (contextResult.wordCount) metaParts.push(`Words: ${contextResult.wordCount}`);
-
-    const keywords =
-      contextResult.topKeywords && contextResult.topKeywords.length
-        ? `<div class="selection-insights"><strong>Focus:</strong> ${contextResult.topKeywords.join(
-            ", "
-          )}</div>`
-        : "";
-
-    const sentences =
-      sentimentResult.sampleSentences && sentimentResult.sampleSentences.length
-        ? `<div class="selection-insights"><strong>Notable lines:</strong><ul>${sentimentResult.sampleSentences
-            .map((sentence) => `<li>${sentence}</li>`)
-            .join("")}</ul></div>`
-        : "";
-
-    ui.selectionReport.innerHTML = `
-      <div class="selection-summary">
-        <div>
-          <strong>${sentimentResult.descriptor}</strong> (${positivityPercent}%)
-          <span class="selection-meta">${metaParts.join(" · ")}</span>
-        </div>
-        <div class="selection-meta">Political: ${politicalResult.descriptor}${
-          politicalResult.provider ? ` (${politicalResult.provider})` : ""
-        }</div>
-      </div>
-      <div class="selection-meta">${buildPoliticalMetaSummary(politicalResult)}</div>
-      ${keywords}
-      ${sentences}
-      <div class="selection-snippet">${text.slice(0, 240)}${text.length > 240 ? "…" : ""}</div>
+    row.innerHTML = `
+      <label><span>${title}</span><span>${legend}</span></label>
+      <div class="gauge"><div class="gauge-fill"></div><div class="gauge-indicator">•</div></div>
+      <small class="context">Ready</small>
     `;
-  }
-
-  function updateAnalysisDetails(analysis) {
-    if (!ui.analysisDetails) return;
-    if (!analysis) {
-      ui.analysisDetails.innerHTML =
-        '<div class="details-message">No analysis yet. Scroll or select text to trigger the gauges.</div>';
-      return;
-    }
-
-    const { sentimentResult, politicalResult, contextResult } = analysis;
-    const sentimentLines =
-      (sentimentResult.sampleSentences && sentimentResult.sampleSentences.length
-        ? sentimentResult.sampleSentences
-        : contextResult.sentences.slice(0, 2)) || [];
-    const keywords =
-      contextResult.topKeywords && contextResult.topKeywords.length
-        ? contextResult.topKeywords
-        : [];
-
-    const providerLabel =
-      contextResult.provider === "transformer"
-        ? "Multilingual transformer"
-        : contextResult.provider === "lexicon-fallback"
-          ? "AFINN lexicon (fallback)"
-          : "AFINN lexicon";
-
-    const keywordMarkup = keywords.length
-      ? `<ul>${keywords.map((keyword) => `<li>${keyword}</li>`).join("")}</ul>`
-      : "<p>No standout keywords detected.</p>";
-
-    const sentenceMarkup = sentimentLines.length
-      ? `<ol>${sentimentLines.map((line) => `<li>${line}</li>`).join("")}</ol>`
-      : "<p>No specific sentences highlighted.</p>";
-
-    ui.analysisDetails.innerHTML = `
-      <div class="details-section">
-        <h3>Sentiment drivers</h3>
-        <p><strong>${sentimentResult.descriptor}</strong> (${Math.round(sentimentResult.normalized * 100)}%) · ${providerLabel}</p>
-        ${sentenceMarkup}
-      </div>
-      <div class="details-section">
-        <h3>Top keywords</h3>
-        ${keywordMarkup}
-      </div>
-      <div class="details-section">
-        <h3>Political cues</h3>
-        <p>${buildPoliticalMetaSummary(politicalResult)}</p>
-        <p>Detected language: ${contextResult.language?.toUpperCase() ?? "EN"}</p>
-      </div>
-    `;
-  }
-
-  function buildPoliticalMetaSummary(result) {
-    if (!result) {
-      return "No political data";
-    }
-    if (result.distribution) {
-      return `L:${formatPercent(result.distribution["Left leaning"])} C:${formatPercent(
-        result.distribution.Center
-      )} R:${formatPercent(result.distribution["Right leaning"])}`;
-    }
-    return `Left refs: ${result.leftScore ?? 0} · Right refs: ${result.rightScore ?? 0}`;
-  }
-
-  function isMultilingualAvailable() {
-    return (
-      typeof window.MultilingualSentiment !== "undefined" &&
-      typeof window.MultilingualSentiment.analyze === "function"
-    );
-  }
-
-  function isEnglish(languageCode) {
-    if (!languageCode) return true;
-    const normalized = languageCode.toLowerCase();
-    return normalized === "en" || ENGLISH_LANG_CODES.has(normalized);
-  }
-
-  function detectLanguage(text) {
-    const attrLang = normalizeLang(document.documentElement.getAttribute("lang"));
-    if (attrLang) return attrLang;
-    const meta = document.querySelector("meta[http-equiv='content-language']");
-    if (meta?.content) {
-      const metaLang = normalizeLang(meta.content.split(",")[0]);
-      if (metaLang) return metaLang;
-    }
-    const asciiRatio = text ? text.replace(/[^\x00-\x7F]/g, "").length / text.length : 1;
-    if (asciiRatio < 0.85) {
-      const navigatorLang = normalizeLang(
-        (navigator.language || (Array.isArray(navigator.languages) ? navigator.languages[0] : "")) ??
-          ""
-      );
-      if (navigatorLang) return navigatorLang;
-      return "auto";
-    }
-    return "en";
-  }
-
-  function normalizeLang(value = "") {
-    return value ? value.toLowerCase().split("-")[0].trim() : "";
-  }
-
-  function getSelectionText() {
-    const selection = window.getSelection && window.getSelection();
-    return selection ? selection.toString().trim() : "";
-  }
-
-  function formatPercent(value) {
-    if (typeof value !== "number" || Number.isNaN(value)) {
-      return "0%";
-    }
-    return `${Math.round(value * 100)}%`;
-  }
-
-  function debounce(fn, delay) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = window.setTimeout(() => fn(...args), delay);
+    return {
+      row,
+      fill: row.querySelector(".gauge-fill"),
+      indicator: row.querySelector(".gauge-indicator"),
+      status: row.querySelector(".context")
     };
   }
 
-  function clamp(value, min, max) {
-    return Math.min(max, Math.max(min, value));
+  function updateGauge(elements, result) {
+    const score = result.score;
+    // Map -100 (Subj) to 100 (Obj) points to 0% - 100% position
+    let pct = (score + 100) / 2;
+    // Clamp
+    pct = Math.max(0, Math.min(100, pct));
+
+    elements.fill.style.width = `100%`;
+    elements.fill.style.background = `linear-gradient(90deg, #f87171, #34d399)`;
+    elements.indicator.style.left = `${pct}%`;
+    elements.indicator.textContent = `${Math.round(score)}`;
+    elements.status.textContent = `${result.label} (${result.model})`;
   }
 
-  function applySensitivity(normalized, factor) {
-    const delta = normalized - 0.5;
-    return clamp(0.5 + delta * factor, 0, 1);
+  function setPanelStatus(msg) {
+    ui.objectivityGauge.status.textContent = msg;
   }
 
-  function countOccurrences(haystack, needle) {
-    if (!haystack || !needle) return 0;
-    const pattern = new RegExp(`\\b${escapeRegex(needle)}\\b`, "g");
-    const matches = haystack.match(pattern);
-    return matches ? matches.length : 0;
+  function updateAnalysisDetails(analysis) {
+    if (!analysis) return;
+    const { result } = analysis;
+    const stats = result.lexiconStats;
+
+    let content = `<div class="details-section"><h3>Model Info</h3><p>${result.model}</p></div>`;
+
+    if (stats && stats.subjectiveWords.length > 0) {
+      content += `
+        <div class="details-section">
+          <h3>Subjective Triggers (Lexicon)</h3>
+          <ul>${stats.subjectiveWords.map(w => `<li>${w}</li>`).join('')}</ul>
+          <p class="subtitle">...and ${stats.subjectiveCount - stats.subjectiveWords.length} more.</p>
+        </div>`;
+    } else {
+      // Fallback explanation when model sees subjectivity but lexicon does not
+      if (result.label === "Subjective") {
+        content += `
+        <div class="details-section">
+          <h3>Subjective Triggers</h3>
+          <p>Detected by model semantics.</p>
+          <p class="subtitle">The AI model identified this text as subjective based on context, even though no specific keywords were found in the current lexicon.</p>
+        </div>`;
+      } else {
+        content += `<div class="details-section"><p>No specific subjective keywords detected.</p></div>`;
+      }
+    }
+    ui.analysisDetails.innerHTML = content;
   }
 
-  function escapeRegex(text) {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  function renderSelectionReport(state) {
+    const container = ui.selectionReport;
+    if (state.loading) {
+      container.innerHTML = "<div class='selection-message'>Analyzing selection...</div>";
+    } else if (state.error) {
+      container.innerHTML = `<div class='selection-message selection-error'>${state.error}</div>`;
+    } else if (state.result) {
+      const res = state.result;
+      container.innerHTML = `
+        <div class="selection-summary">
+          <strong>${res.label}</strong> (${Math.round(res.score)} pts)
+          <span class="selection-meta">via ${res.model}</span>
+        </div>
+        <div class="selection-snippet">${state.text.slice(0, 100)}...</div>
+      `;
+    }
   }
 })();
-
