@@ -92,21 +92,43 @@
 
 
 
+  let sessionApiKey = null;
+
   async function analyze(text) {
     // 1. Local Server Mode
     if (USE_LOCAL_SERVER) {
       try {
+        const payload = { text: text, model: currentModelKey };
+        if (currentModelKey === "gemini" && sessionApiKey) {
+          payload.api_key = sessionApiKey;
+        }
+
         const response = await fetch(`${SERVER_URL}/analyze`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: text, model: currentModelKey })
+          body: JSON.stringify(payload)
         });
+
         if (!response.ok) {
           let errorMsg = "Server returned " + response.status;
+          let detail = "";
           try {
             const errData = await response.json();
-            if (errData.detail) errorMsg += ": " + errData.detail;
+            if (errData.detail) {
+              errorMsg += ": " + errData.detail;
+              detail = errData.detail;
+            }
           } catch (e) { /* ignore parse error */ }
+
+          // Check for missing API key error
+          if (currentModelKey === "gemini" && (detail.includes("GEMINI_API_KEY") || response.status === 500)) {
+            const userKey = prompt("Gemini API Key missing on server.\nPlease enter your Gemini API Key to proceed:");
+            if (userKey) {
+              sessionApiKey = userKey;
+              return analyze(text); // Retry with new key
+            }
+          }
+
           throw new Error(errorMsg);
         }
         const result = await response.json();

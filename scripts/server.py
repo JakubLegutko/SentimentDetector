@@ -87,6 +87,7 @@ except Exception as e:
 class TextRequest(BaseModel):
     text: str
     model: str = "distilbert-subjectivity" # Default
+    api_key: str = None
 
 class TranslationRequest(BaseModel):
     text: str
@@ -137,9 +138,9 @@ def analyze(request: TextRequest):
         }
     
     elif selected_model == "gemini":
-        api_key = os.environ.get("GEMINI_API_KEY")
+        api_key = os.environ.get("GEMINI_API_KEY") or request.api_key
         if not api_key:
-             raise HTTPException(status_code=500, detail="GEMINI_API_KEY environment variable not set.")
+             raise HTTPException(status_code=500, detail="GEMINI_API_KEY environment variable not set and no key provided in request.")
         
         try:
             genai.configure(api_key=api_key)
