@@ -28,6 +28,18 @@ This extension relies on a local Python server to run the Transformer models.
    ```
    The server runs on `http://localhost:8000`.
 
+### Restoring Models (First Run)
+Since large model files are not stored in Git, you need to download them:
+
+1. **Download Base Models** (DeBERTa, NLLB, BERT):
+   ```bash
+   python scripts/download_models.py
+   ```
+2. **Restore Fine-Tuned Model**:
+   - *Option A (Train it)*: Run `python model_tuner/finetune.py --dataset_name <your-dataset>`
+   - *Option B (Download it)*: If you have the `distilbert_subjectivity_v1` folder saved elsewhere, place it in the root directory.
+   - *Fallback*: If missing, the server will default to `distilbert-base-uncased`.
+
 ### Option 2: Run with Docker
 1. Build the image:
    ```bash

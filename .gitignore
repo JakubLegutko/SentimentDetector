@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv
+venv/
+env/
+
+# IDEs
+.vscode/
+.idea/
+
+# Models & Large Files
+models/
+distilbert_subjectivity_v1/
+sentiment_model/
+*.safetensors
+*.bin
+*.onnx
+
+# System
+.DS_Store
+Thumbs.db
