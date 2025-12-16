@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoModelForSeq2SeqLM, pipeline
 import torch
+import google.generativeai as genai
 import os
+import json
+from dotenv import load_dotenv
+
+load_dotenv() # Load env vars from .env file
 
 app = FastAPI()
 
@@ -20,6 +25,7 @@ LOCAL_MODEL_PATH = "distilbert_subjectivity_v1"
 TRANSLATION_MODEL_ID = "facebook/nllb-200-distilled-600M" 
 DEBERTA_MODEL_ID = "cross-encoder/nli-deberta-v3-base"
 BERT_MODEL_ID = "bert-base-uncased"
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 print("Loading models... this may take a while.")
 
@@ -129,6 +135,40 @@ def analyze(request: TextRequest):
             "score": 0.5,
             "model": "BERT Base (Local)"
         }
+    
+    elif selected_model == "gemini":
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+             raise HTTPException(status_code=500, detail="GEMINI_API_KEY environment variable not set.")
+        
+        try:
+            genai.configure(api_key=api_key)
+            model = genai.GenerativeModel('gemini-2.5-flash')
+            
+            prompt = f"""You are an objectivity analyzer. Here is the text to analyze:
+{request.text}
+
+Provide the response as a score, normalized from -1 (subjective) to 1 (objective) and provide a short explanation for reasoning behind the analysis. Keep the reasoning explanation to a minimum.
+
+You must return the response in strict JSON format:
+{{
+  "score": <float between -1 and 1>,
+  "explanation": "<string explanation>"
+}}
+"""
+            response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+            output = json.loads(response.text)
+            
+            return {
+                "label": "Objective" if output["score"] > 0 else "Subjective",
+                "score": output["score"], # Raw -1 to 1
+                "explanation": output["explanation"],
+                "model": "Gemini 1.5 Flash"
+            }
+
+        except Exception as e:
+            print(f"Gemini API Error: {e}")
+            raise HTTPException(status_code=500, detail=f"Gemini Analysis Failed: {str(e)}")
     
     else:
         raise HTTPException(status_code=400, detail=f"Unknown model: {selected_model}")

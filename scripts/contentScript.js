@@ -97,7 +97,8 @@
 
   async function analyzeObjectivity(text) {
     // Auto-translation step
-    if (window.ObjectivityAnalyzer && window.ObjectivityAnalyzer.translate) {
+    // Auto-translation step (Skip for Gemini)
+    if (ui.modelSelector.value !== 'gemini' && window.ObjectivityAnalyzer && window.ObjectivityAnalyzer.translate) {
       try {
         const translated = await window.ObjectivityAnalyzer.translate(text);
         if (translated !== text) {
@@ -333,7 +334,7 @@
       Object.keys(models).forEach(key => {
         const opt = document.createElement("option");
         opt.value = key;
-        opt.textContent = models[key].name.split(" ")[0];
+        opt.textContent = models[key].name;
         modelSelector.appendChild(opt);
       });
     }
@@ -428,6 +429,14 @@
     const stats = result.lexiconStats;
 
     let content = `<div class="details-section"><h3>Model Info</h3><p>${result.model}</p></div>`;
+
+    if (result.explanation) {
+      content += `
+        <div class="details-section">
+          <h3>Analysis Explanation</h3>
+          <p class="explanation-text">${result.explanation}</p>
+        </div>`;
+    }
 
     if (stats && stats.subjectiveWords.length > 0) {
       content += `

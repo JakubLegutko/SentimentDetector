@@ -19,6 +19,9 @@ sentiment_model/
 *.bin
 *.onnx
 
+# Secrets
+.env
+
 # System
 .DS_Store
 Thumbs.db

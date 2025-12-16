@@ -8,3 +8,5 @@ langdetect
 requests
 protobuf
 accelerate
+google-generativeai
+python-dotenv

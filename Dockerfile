@@ -19,7 +19,9 @@ RUN pip install --no-cache-dir \
     sentencepiece \
     langdetect \
     protobuf \
-    accelerate
+    accelerate \
+    google-generativeai \
+    python-dotenv
 
 # Copy the entire workspace into the container
 COPY . /app

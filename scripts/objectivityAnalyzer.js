@@ -19,6 +19,11 @@
       labels: ["subjective", "objective"], // Label 0, Label 1 mapping
       name: "Fine-Tuned Subjectivity",
       quantized: false // We exported as standard ONNX (float32), not quantized
+    },
+    "gemini": {
+      id: "gemini-2.5-flash",
+      type: "llm",
+      name: "LLM (Gemini)"
     }
 
   };
@@ -96,7 +101,14 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: text, model: currentModelKey })
         });
-        if (!response.ok) throw new Error("Server returned " + response.status);
+        if (!response.ok) {
+          let errorMsg = "Server returned " + response.status;
+          try {
+            const errData = await response.json();
+            if (errData.detail) errorMsg += ": " + errData.detail;
+          } catch (e) { /* ignore parse error */ }
+          throw new Error(errorMsg);
+        }
         const result = await response.json();
         console.log("SERVER RESPONSE:", result);
 
@@ -115,6 +127,19 @@
             model: "Local Server (DeBERTa)",
             provider: "server"
           };
+
+        } else if (currentModelKey === "gemini") {
+          // Gemini returns { score: -1 to 1, explanation: "..." }
+          // UI expects score of -100 to 100
+          const finalScore = result.score * 100;
+          return {
+            score: finalScore,
+            label: result.label, // "Objective" or "Subjective"
+            confidence: Math.abs(finalScore),
+            model: "Gemini 2.5 Flash",
+            provider: "server-llm",
+            explanation: result.explanation
+          }
         } else if (currentModelKey === "bert-base") {
           return {
             score: result.score,
