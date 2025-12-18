@@ -1,0 +1,7 @@
+requests
+readability-lxml
+beautifulsoup4
+beautifulsoup4
+lxml
+cloudscraper
+openai

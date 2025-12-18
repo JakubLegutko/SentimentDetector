@@ -1,0 +1,456 @@
+
+<a target="_blank" href="https://www.fakt.pl/"><img alt="Fakt" src="/system/logo_images/7921/original/fakt.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wyborcza.pl/"><img alt="Gazeta Wyborcza" src="/system/logo_images/7922/original/wyborcza3.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.se.pl/"><img alt="Super Express" src="/system/logo_images/7923/original/Super-Express.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.gazetaprawna.pl/"><img alt="Dziennik Gazeta Prawna" src="/system/logo_images/7924/original/gazetaprawna.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://naszemiasto.pl/"><img alt="Nasze Miasto" src="/system/logo_images/7925/original/naszemiasto.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.rp.pl/"><img alt="Rzeczpospolita" src="/system/logo_images/7926/original/Rzeczpospolita.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.parkiet.com/"><img alt="Parkiet Gazeta Gieldy" src="/system/logo_images/7928/original/parkiet.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gazetakrakowska.pl/"><img alt="Gazeta Krakowska" src="/system/logo_images/7930/original/Gazeta-Krakowska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.przegladsportowy.pl/"><img alt="Przegląd Sportowy" src="/system/logo_images/7929/original/przegladsportowy.gif" />
+<div class='info-strip' style='border-color: #034491;background-color: #034491;'>Sport</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.pb.pl/"><img alt="Puls Biznesu" src="/system/logo_images/7927/original/Puls-Biznesu.png" />
+<div class='info-strip' style='border-color: #034491;background-color: #034491;'>Biznes</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wspolczesna.pl/"><img alt="Gazeta Współczesna" src="/system/logo_images/7931/original/wspolczesna.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://dziennikzachodni.pl/"><img alt="Dziennik Zachodni" src="/system/logo_images/7934/original/dziennikzachodni.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://dziennikbaltycki.pl/"><img alt="Dziennik Bałtycki" src="/system/logo_images/7932/original/dziennikbaltycki.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://nowiny24.pl/"><img alt="Nowiny 24" src="/system/logo_images/7933/original/nowiny24.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://echodnia.eu/"><img alt="Echo Dnia" src="/system/logo_images/7935/original/echodnia.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gazetaolsztynska.pl/"><img alt="Gazeta Olsztyńska" src="/system/logo_images/7936/original/gazetaolsztynska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://24kurier.pl/"><img alt="24kurier" src="/system/logo_images/7937/original/24kurier.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gs24.pl/"><img alt="Głos Szczeciński" src="/system/logo_images/7938/original/gs24.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gp24.pl/"><img alt="Głos Pomorza" src="/system/logo_images/7939/original/gp24.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gloswielkopolski.pl/"><img alt="Głos Wielkopolski" src="/system/logo_images/7940/original/gloswielkopolski.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://pomorska.pl/"><img alt="Gazeta Pomorska" src="/system/logo_images/7941/original/Gazeta-Pomorska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://expressbydgoski.pl/"><img alt="Express Bydgoski" src="/system/logo_images/7942/original/expressbydgoski.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://nowosci.com.pl/"><img alt="Nowości Dziennik Toruński" src="/system/logo_images/7943/original/nowosci.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://dziennikpolski24.pl/"><img alt="Dziennik Polski " src="/system/logo_images/7944/original/dziennikpolski24.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://dzienniklodzki.pl/"><img alt="Dziennik Łódzki" src="/system/logo_images/7945/original/dzienniklodzki.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://expressilustrowany.pl/"><img alt="Express Ilustrowany" src="/system/logo_images/7946/original/expressilustrowany.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gazetawroclawska.pl/"><img alt="Gazeta Wrocławska" src="/system/logo_images/7947/original/gazetawroclawska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gazetalubuska.pl/"><img alt="Gazeta Lubuska" src="/system/logo_images/7948/original/gazetalubuska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://nto.pl/"><img alt="Nowa Trybuna Opolska" src="/system/logo_images/7949/original/Nowa-Trybuna-Opolska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://poranny.pl/"><img alt="Kurier Poranny" src="/system/logo_images/7950/original/Kurier-Poranny.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.polityka.pl/"><img alt="Polityka" src="/system/logo_images/7951/original/polityka.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.dziennikwschodni.pl/"><img alt="Dziennik wschodni" src="/system/logo_images/7952/original/dziennikwschodni.png" />
+
+<a target="_blank" href="https://www.pudelek.pl/"><img alt="Pudelek" src="/system/logo_images/7985/original/Pudelek.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.fakt.pl/kobieta/plotki"><img alt="Fakt Plotki" src="/system/logo_images/7986/original/fakt.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.pomponik.pl/"><img alt="Pomponik" src="/system/logo_images/7987/original/pomponik.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.plotek.pl/"><img alt="Plotek" src="/system/logo_images/7988/original/plotek.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://gwiazdy.wp.pl/"><img alt="WP Gwiazdy" src="/system/logo_images/7989/original/WP-Gwiazdy.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.kozaczek.pl/"><img alt="Kozaczek" src="/system/logo_images/7990/original/kozaczek.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.se.pl/rozrywka/plotki/"><img alt="SE.pl Plotki" src="/system/logo_images/7991/original/Super-Express.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://plejada.pl/"><img alt="Plejada" src="/system/logo_images/7992/original/Plejada.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.msn.com/pl-pl/rozrywka"><img alt="MSN" src="/system/logo_images/7993/original/msn-purple.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://party.pl/"><img alt="Party" src="/system/logo_images/7994/original/party.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.eska.pl/hotplota/"><img alt="Radio Eska Hotplaza" src="/system/logo_images/7995/original/eska-hotplota.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://rozrywka.wprost.pl/"><img alt="Wprost" src="/system/logo_images/7996/original/wprost6.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.planeta.pl/Rozrywka"><img alt="Planeta" src="/system/logo_images/7997/original/planeta.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.radiozet.pl/Rozrywka"><img alt="Radiozet Rozrywka" src="/system/logo_images/7998/original/radiozet.png" />
+
+<a target="_blank" href="http://www.wp.pl/"><img alt="wp.pl" src="/system/logo_images/169/original/wp-pl-3.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.gazeta.pl/"><img alt="gazeta.pl" src="/system/logo_images/175/original/gazeta-pl-3.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.fakt.pl/"><img alt="fakt.pl" src="/system/logo_images/192/original/fakt.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.tvn24.pl/"><img alt="tvn24" src="/system/logo_images/170/original/tvn24-pl.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://wyborcza.pl/"><img alt="gazeta wyborcza" src="/system/logo_images/172/original/wyborcza3.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wiadomosci.tvp.pl/"><img alt="tvp wiadomosci" src="/system/logo_images/7817/original/tvp-pl.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.onet.pl/"><img alt="onet.pl" src="/system/logo_images/171/original/onet.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.polsatnews.pl/"><img alt="Polsat News" src="/system/logo_images/174/original/polsatnews.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://news.google.pl/"><img alt="Google News Polska" src="/system/logo_images/7819/original/google-news-polska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wydarzenia.interia.pl/"><img alt="interia.pl" src="/system/logo_images/190/original/interia.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.polskieradio24.pl/"><img alt="polskie radio 24" src="/system/logo_images/177/original/polskieradio24.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.wykop.pl/"><img alt="wykop" src="/system/logo_images/173/original/wykop.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://naszemiasto.pl/"><img alt="naszemiasto" src="/system/logo_images/7823/original/naszemiasto5.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.tvp.info/"><img alt="TVP Info" src="/system/logo_images/180/original/TVP-Info.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://i.pl/"><img alt="i.pl" src="/system/logo_images/189/original/i-pl.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.gazetaprawna.pl/"><img alt="gazeta prawna" src="/system/logo_images/7822/original/gazetaprawna.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wiadomosci.radiozet.pl/"><img alt="radiozet" src="/system/logo_images/7818/original/radiozet.png" />
+<div class='info-strip' style='border-color: #0099ff;background-color: #0099ff;'>Wiadomości</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.bankier.pl/"><img alt="bankier" src="/system/logo_images/7821/original/bankier.png" />
+<div class='info-strip' style='border-color: #0099ff;background-color: #0099ff;'>Finanse</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.medonet.pl/"><img alt="medonet" src="/system/logo_images/7820/original/medonet.png" />
+<div class='info-strip' style='border-color: #0099ff;background-color: #0099ff;'>Zdrowie</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.sport.pl/"><img alt="sport.pl" src="/system/logo_images/183/original/sport-pl-2015.gif" />
+<div class='info-strip' style='border-color: #0099ff;background-color: #0099ff;'>Sport</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.pb.pl/"><img alt="Puls Biznesu" src="/system/logo_images/7824/original/Puls-Biznesu.png" />
+<div class='info-strip' style='border-color: #0099ff;background-color: #0099ff;'>Biznes</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://tvrepublika.pl/"><img alt="tvrepublika" src="/system/logo_images/178/original/tvrepublika.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.rp.pl/"><img alt="rp.pl" src="/system/logo_images/176/original/rp-pl.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.se.pl/"><img alt="se.pl" src="/system/logo_images/184/original/Super-Express.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://niezalezna.pl/"><img alt="niezalezna" src="/system/logo_images/182/original/niezalezna.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://natemat.pl/"><img alt="natemat" src="/system/logo_images/188/original/natemat.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.tokfm.pl/"><img alt="tokfm" src="/system/logo_images/186/original/tokfm-pl.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.trojmiasto.pl/"><img alt="trojmiasto" src="/system/logo_images/181/original/trojmiasto.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://www.wirtualnemedia.pl/"><img alt="wirtualnemedia" src="/system/logo_images/187/original/wirtualnemedia.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.pudelek.pl/"><img alt="Pudelek" src="/system/logo_images/191/original/Pudelek.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="http://wpolityce.pl/"><img alt="wpolityce" src="/system/logo_images/185/original/wpolityce.gif" />
+
+<div class='logo'>
+<a target="_blank" href="https://www.pb.pl/"><img alt="Puls Biznesu" src="/system/logo_images/8052/original/Puls-Biznesu.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.money.pl/"><img alt="Money.pl" src="/system/logo_images/8051/original/moneypl.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.wnp.pl/"><img alt="WNP.pl" src="/system/logo_images/8054/original/wnp.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.parkiet.com/"><img alt="Parkiet" src="/system/logo_images/8053/original/parkiet.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://businessinsider.com.pl/"><img alt="Business Insider" src="/system/logo_images/8050/original/businessinsider-logo.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.forbes.pl/"><img alt="Forbes" src="/system/logo_images/8049/original/forbes2022.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://forsal.pl/"><img alt="Forsal" src="/system/logo_images/8055/original/forsal.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://biznes.interia.pl/"><img alt="Interia Biznes" src="/system/logo_images/8056/original/interia-biznes.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wyborcza.biz/biznes/0,0.html"><img alt="Wyborcza Biznes" src="/system/logo_images/8057/original/wyborcza-biz.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://finanse.wp.pl/"><img alt="WP Finanse" src="/system/logo_images/8058/original/WP-Finanse.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.bloomberg.com/"><img alt="Bloomberg" src="/system/logo_images/8059/original/bloomberg-blue.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://stooq.pl/"><img alt="Stooq" src="/system/logo_images/8060/original/stooq-pl.gif" />
+< a target="_blank" href="https://dorzeczy.pl/">
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.gazetaprawna.pl/"><img alt="gazeta prawna" src="/system/logo_images/8061/original/gazetaprawna.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.google.com/finance/"><img alt="Google finance" src="/system/logo_images/8062/original/Google-Finance-6.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://tvn24.pl/biznes"><img alt="TVN24 Biznes" src="/system/logo_images/8063/original/tvn24bis.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.rp.pl/ekonomia"><img alt="RP Ekonomia" src="/system/logo_images/8064/original/RP-Ekonomia.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.polsatnews.pl/wiadomosci/biznes/"><img alt="Polsat News Biznes" src="/system/logo_images/8065/original/polsatnews.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://pl.investing.com/"><img alt="investing.com" src="/system/logo_images/8066/original/investing.png" />
+
+<a target="_blank" href="https://wiadomosci.wp.pl/swiat"><img alt="WP Świat" src="/system/logo_images/7953/original/wp-swiat.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wiadomosci.onet.pl/swiat"><img alt="Onet | Wiadomości ze świata" src="/system/logo_images/7954/original/Onet--swiat.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://tvn24.pl/swiat"><img alt="TVN24 świata" src="/system/logo_images/7955/original/tvn24-pl.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://news.google.com/topics/CAAqJggKIiBDQkFTRWdvSUwyMHZNRGx1YlY4U0FuQnNHZ0pRVENnQVAB?hl=pl&amp;gl=PL&amp;ceid=PL%3Apl"><img alt="Google Świat" src="/system/logo_images/7963/original/google-news-polska.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.fakt.pl/wydarzenia/swiat"><img alt="Fakt Świat" src="/system/logo_images/7964/original/fakt.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wiadomosci.dziennik.pl/swiat/"><img alt="Dziennik" src="/system/logo_images/7967/original/dziennik-pl.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wydarzenia.interia.pl/zagranica"><img alt="Interia Zagranica" src="/system/logo_images/7956/original/interia.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.rp.pl/wydarzenia/swiat"><img alt="RP.pl świata" src="/system/logo_images/7957/original/Rzeczpospolita.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.pb.pl/"><img alt="Puls Biznesu" src="/system/logo_images/7968/original/Puls-Biznesu.png" />
+<div class='info-strip' style='border-color: #d77e28;background-color: #d77e28;'>Biznes</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.bankier.pl/"><img alt="Bankier" src="/system/logo_images/7969/original/bankier.png" />
+<div class='info-strip' style='border-color: #d77e28;background-color: #d77e28;'>Finanse</div>
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.newsweek.pl/swiat"><img alt="Newsweek" src="/system/logo_images/7958/original/newsweek.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.polsatnews.pl/wiadomosci/swiat/"><img alt="Polsat News Świat" src="/system/logo_images/7959/original/polsatnews.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wyborcza.pl/0,75399.html"><img alt="Wyborcza Świat" src="/system/logo_images/7960/original/wyborcza3.gif" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.wprost.pl/swiat"><img alt="Wprost Świat" src="/system/logo_images/7961/original/wprost.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.polskieradio24.pl/321/6714"><img alt="Polskieradio24 Świat" src="/system/logo_images/7962/original/polskieradio24.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://niezalezna.pl/kategoria/swiat"><img alt="Niezalezna.pl" src="/system/logo_images/7970/original/niezalezna.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://wiadomosci.radiozet.pl/Swiat"><img alt="Radiozet Świat" src="/system/logo_images/7965/original/radiozet.png" />
+
+</a></div>
+<div class='logo'>
+<a target="_blank" href="https://www.se.pl/wiadomosci/swiat/"><img alt="Se.pl Świat" src="/system/logo_images/7966/original/Super-Express.png" />
+
+<a target="_blank" href="https://niezalezna.pl">    
+
+<a target="_blank" href="https://news.google.com/home?hl=pl&gl=PL&ceid=PL%3Apl">

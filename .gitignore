@@ -18,6 +18,8 @@ sentiment_model/
 *.safetensors
 *.bin
 *.onnx
+datasets/
+Lexicon/
 
 # Secrets
 .env

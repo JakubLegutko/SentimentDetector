@@ -21,7 +21,9 @@ app.add_middleware(
 )
 
 # Configuration
-LOCAL_MODEL_PATH = "distilbert_subjectivity_v1"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+LOCAL_MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "distilbert_subjectivity_v1")
 TRANSLATION_MODEL_ID = "facebook/nllb-200-distilled-600M" 
 DEBERTA_MODEL_ID = "cross-encoder/nli-deberta-v3-base"
 BERT_MODEL_ID = "bert-base-uncased"
