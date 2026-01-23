@@ -43,7 +43,7 @@ def main():
 Oceń tekst na skali od -1.0 (całkowicie subiektywny, emocjonalny, opinia) do 1.0 (całkowicie obiektywny, suchy fakt, raport).
 Zwróć TYLKO poprawny obiekt JSON w następującym formacie:
 {"score": <float>, "reason": "<krótkie uzasadnienie>"}
-Nie dodawaj żadnego markdownu ani tekstu przed lub po JSONie."""
+Nie dodawaj żadnego markdownu ani tekstu przed lub po JSONie. Uzasadnienie musi być w języku polskim."""
 
     with open(args.output, 'a', encoding='utf-8') as out_f:
         for article in tqdm(articles_to_process):
@@ -100,3 +100,6 @@ Nie dodawaj żadnego markdownu ani tekstu przed lub po JSONie."""
                 pass 
                 
     print("Done.")
+
+if __name__ == "__main__":
+    main()
