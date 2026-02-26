@@ -7,6 +7,17 @@
   "host_permissions": [
     "https://huggingface.co/*"
   ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Objectivity Gauge"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -36,8 +47,7 @@
         "vendor/transformers.min.js",
         "vendor/vader.js",
         "models/*",
-        "models/distilbert-subjectivity/*",
-        "models/distilbert-subjectivity/onnx/*"
+        "models/deberta_objectivity/*"
       ],
       "matches": [
         "<all_urls>"

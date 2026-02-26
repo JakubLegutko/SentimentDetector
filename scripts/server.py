@@ -23,59 +23,58 @@ app.add_middleware(
 # Configuration
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(BASE_DIR)
-LOCAL_MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "distilbert_subjectivity_v1")
+DEBERTA_LOCAL_PATH = os.path.join(PROJECT_ROOT, "models", "deberta_objectivity")
+CNN_MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "1dcnn_objectivity_model.pt")
 TRANSLATION_MODEL_ID = "facebook/nllb-200-distilled-600M" 
-DEBERTA_MODEL_ID = "cross-encoder/nli-deberta-v3-base"
-BERT_MODEL_ID = "bert-base-uncased"
+
+import sys
+sys.path.append(os.path.join(PROJECT_ROOT, "scripts"))
+try:
+    from train_1dcnn import Text1DCNN
+except ImportError:
+    Text1DCNN = None
+import re
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 print("Loading models... this may take a while.")
 
-# 1. Fine-Tuned Subjectivity Model (DistilBERT)
+# 1. Fine-Tuned DeBERTa Model
 try:
-    if os.path.exists(LOCAL_MODEL_PATH):
-        print(f"Loading local subjectivity model from {LOCAL_MODEL_PATH}...")
-        try:
-            subjectivity_tokenizer = AutoTokenizer.from_pretrained(LOCAL_MODEL_PATH)
-        except Exception:
-            print("Local tokenizer not found, falling back to distilbert-base-uncased tokenizer.")
-            subjectivity_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-            
-        subjectivity_model = AutoModelForSequenceClassification.from_pretrained(LOCAL_MODEL_PATH)
+    if os.path.exists(DEBERTA_LOCAL_PATH):
+        print(f"Loading local DeBERTa model from {DEBERTA_LOCAL_PATH}...")
+        deberta_tokenizer = AutoTokenizer.from_pretrained(DEBERTA_LOCAL_PATH)
+        deberta_model = AutoModelForSequenceClassification.from_pretrained(DEBERTA_LOCAL_PATH)
+        deberta_classifier = pipeline("text-classification", model=deberta_model, tokenizer=deberta_tokenizer, top_k=None)
+        print("Fine-Tuned DeBERTa model loaded.")
     else:
-        print(f"Local model not found at {LOCAL_MODEL_PATH}. Using base distilbert (for testing only).")
-        subjectivity_tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
-        subjectivity_model = AutoModelForSequenceClassification.from_pretrained("distilbert-base-uncased")
-    
-    subjectivity_classifier = pipeline("text-classification", model=subjectivity_model, tokenizer=subjectivity_tokenizer, top_k=None)
-    
-    # Set explicit labels
-    subjectivity_model.config.id2label = {0: "subjective", 1: "objective"}
-    subjectivity_model.config.label2id = {"subjective": 0, "objective": 1}
-    
-    print("Fine-Tuned Subjectivity model loaded.")
-except Exception as e:
-    print(f"Error loading subjectivity model: {e}")
-    subjectivity_classifier = None
-
-# 2. DeBERTa v3 (Zero-Shot)
-try:
-    print(f"Loading DeBERTa model {DEBERTA_MODEL_ID}...")
-    # Zero-shot classification pipeline uses an NLI model
-    deberta_classifier = pipeline("zero-shot-classification", model=DEBERTA_MODEL_ID)
-    print("DeBERTa model loaded.")
+        print(f"Local model not found at {DEBERTA_LOCAL_PATH}.")
+        deberta_classifier = None
 except Exception as e:
     print(f"Error loading DeBERTa model: {e}")
     deberta_classifier = None
 
-# 3. BERT Base (Feature Extraction)
+# 2. 1DCNN Objectivity Model
 try:
-    print(f"Loading BERT model {BERT_MODEL_ID}...")
-    bert_pipeline = pipeline("feature-extraction", model=BERT_MODEL_ID)
-    print("BERT model loaded.")
+    print(f"Loading 1DCNN model from {CNN_MODEL_PATH}...")
+    checkpoint = torch.load(CNN_MODEL_PATH, map_location=torch.device('cpu'))
+    cnn_vocab = checkpoint['vocab']
+    
+    cnn_model = Text1DCNN(
+        vocab_size=len(cnn_vocab),
+        embedding_dim=checkpoint['embedding_dim'],
+        num_filters=checkpoint['num_filters'],
+        filter_sizes=checkpoint['filter_sizes'],
+        output_dim=1,
+        dropout=0.0
+    )
+    cnn_model.load_state_dict(checkpoint['model_state_dict'])
+    cnn_model.eval()
+    print("1DCNN Objectivity model loaded.")
 except Exception as e:
-    print(f"Error loading BERT model: {e}")
-    bert_pipeline = None
+    print(f"Error loading 1DCNN model: {e}")
+    cnn_model = None
+    cnn_vocab = None
+
 
 # Load Translation Model
 try:
@@ -88,7 +87,7 @@ except Exception as e:
 
 class TextRequest(BaseModel):
     text: str
-    model: str = "distilbert-subjectivity" # Default
+    model: str = "deberta_objectivity" # Default
     api_key: str = None
 
 class TranslationRequest(BaseModel):
@@ -101,9 +100,8 @@ def read_root():
     return {
         "status": "running", 
         "models": {
-            "distilbert-subjectivity": subjectivity_classifier is not None,
-            "deberta-zero-shot": deberta_classifier is not None,
-            "bert-base": bert_pipeline is not None,
+            "deberta_objectivity": deberta_classifier is not None,
+            "1dcnn_objectivity_model": cnn_model is not None,
             "translation": translation_pipeline is not None
         }
     }
@@ -116,27 +114,50 @@ def analyze(request: TextRequest):
     # 3000 chars is roughly 600-800 tokens. Safe for 1024 models, slightly over for 512 but better.
     truncated_text = request.text[:3000] 
 
-    if selected_model == "distilbert-subjectivity":
-        if not subjectivity_classifier:
-            raise HTTPException(status_code=503, detail="Fine-tuned model not available")
-        # DistilBERT max is 512. We enable truncation.
-        results = subjectivity_classifier(truncated_text, truncation=True, max_length=512)
-        
-    elif selected_model == "deberta-zero-shot":
+    if selected_model == "deberta_objectivity":
         if not deberta_classifier:
             raise HTTPException(status_code=503, detail="DeBERTa model not available")
-        # DeBERTa v3 max is 512/1024? Enable truncation.
-        results = deberta_classifier(truncated_text, candidate_labels=["subjective", "objective"], truncation=True, max_length=512)
-        print(f"DEBERTA RETURN: {results}")
-        return results
-
-    elif selected_model == "bert-base":
-        if not bert_pipeline:
-             raise HTTPException(status_code=503, detail="BERT model not available")
+        # DeBERTa max is 512. We enable truncation.
+        results = deberta_classifier(truncated_text, truncation=True, max_length=512)
+        
+        # Results is usually [[{'label': 'LABEL_0', 'score': 0.123}]] due to top_k=None or single output
+        score_val = 0.0
+        if isinstance(results, list) and len(results) > 0:
+            if isinstance(results[0], list):
+                 score_val = results[0][0].get('score', 0)
+            else:
+                 score_val = results[0].get('score', 0)
+        elif isinstance(results, dict):
+            score_val = results.get('score', 0)
+            
         return {
-            "label": "Needs Fine-tuning",
-            "score": 0.5,
-            "model": "BERT Base (Local)"
+            "label": "Objective" if score_val > 0 else "Subjective",
+            "score": score_val,
+            "model": "DeBERTa Objectivity"
+        }
+        
+    elif selected_model == "1dcnn_objectivity_model":
+        if not cnn_model:
+            raise HTTPException(status_code=503, detail="1DCNN model not available")
+        
+        # Tokenize and encode
+        tokens = re.findall(r'\b\S+\b', request.text.lower())
+        encoded = [cnn_vocab.get(word, cnn_vocab['<UNK>']) for word in tokens]
+        
+        # Pad sequence horizontally if it's too short for max filter size
+        min_seq_len = 4 # Default from training script max filter size
+        if len(encoded) < min_seq_len:
+            encoded = encoded + [0] * (min_seq_len - len(encoded))
+            
+        tensor = torch.tensor([encoded], dtype=torch.long)
+        
+        with torch.no_grad():
+            prediction = cnn_model(tensor).item()
+            
+        return {
+            "label": "Objective" if prediction > 0 else "Subjective",
+            "score": prediction,
+            "model": "1DCNN Objectivity"
         }
     
     elif selected_model == "gemini":
@@ -173,17 +194,70 @@ You must return the response in strict JSON format:
             print(f"Gemini API Error: {e}")
             raise HTTPException(status_code=500, detail=f"Gemini Analysis Failed: {str(e)}")
     
+            print(f"Gemini API Error: {e}")
+            raise HTTPException(status_code=500, detail=f"Gemini Analysis Failed: {str(e)}")
+
+    elif selected_model == "local_llm":
+        import requests
+        try:
+            # Re-use Gemini Prompt Structure for consistency
+            prompt = f"""You are an objectivity analyzer. Here is the text to analyze:
+{request.text}
+
+Provide the response as a score, normalized from -1 (subjective) to 1 (objective) and provide a short explanation for reasoning behind the analysis. Keep the reasoning explanation to a minimum.
+
+You must return the response in strict JSON format:
+{{
+  "score": <float between -1 and 1>,
+  "explanation": "<string explanation>"
+}}
+"""
+            llm_payload = {
+                "model": "deepseek", # Default to deepseek or whatever is loaded, server usually ignores if unique
+                "messages": [
+                    {"role": "system", "content": "You are a helpful assistant that outputs only JSON."},
+                    {"role": "user", "content": prompt}
+                ],
+                "temperature": 0.0,
+                "max_tokens": 4096
+            }
+            
+            # Forward to local LLM server
+            response = requests.post("http://localhost:11434/v1/chat/completions", json=llm_payload)
+            response.raise_for_status()
+            
+            result = response.json()
+            content = result['choices'][0]['message']['content'].strip()
+            
+            # Basic cleanup (similar to auto_labeler)
+            if "<think>" in content:
+                content = content.split("</think>")[-1].strip()
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0].strip()
+            elif "```" in content:
+                content = content.split("```")[1].strip()
+                
+            output = json.loads(content)
+            
+            return {
+                "label": "Objective" if output["score"] > 0 else "Subjective",
+                "score": output["score"],
+                "explanation": output["explanation"],
+                "model": "Local LLM"
+            }
+            
+        except requests.exceptions.ConnectionError:
+            raise HTTPException(status_code=503, detail="Local LLM Server not reachable (is it running on port 11434?)")
+        except Exception as e:
+            print(f"Local LLM Error: {e}")
+            raise HTTPException(status_code=500, detail=f"Local LLM Failed: {str(e)}")
+    
     else:
         raise HTTPException(status_code=400, detail=f"Unknown model: {selected_model}")
 
-    # For Text Classification (DistilBERT)
-    # Validately unwrap all nesting (e.g. [[{...}]] or [{...}])
-    final_result = results
-    while isinstance(final_result, list) and len(final_result) > 0 and isinstance(final_result[0], list):
-        final_result = final_result[0]
-    
-    print(f"ANALYZE RETURN ({selected_model}): {final_result}")
-    return final_result
+    # We have already returned for deberta_objectivity and 1dcnn_objectivity_model
+    # The below is only for fallbacks if any were here, but we return early.
+    raise HTTPException(status_code=400, detail=f"Unexpected flow for model: {selected_model}")
 
 @app.post("/translate")
 def translate(request: TranslationRequest):

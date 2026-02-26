@@ -1,0 +1,102 @@
+      <a href="https://news.bbc.co.uk/" target="_top" rel="noopener">BBC News</a>
+      <a href="https://www.channel4.com/news/" target="_top" rel="noopener">Channel 4 News</a>
+      <a href="https://www.express.co.uk/" target="_top" rel="noopener">Daily Express</a>
+      <a href="https://www.dailymail.co.uk/" target="_top" rel="noopener">Daily Mail</a>
+      <a href="https://www.mirror.co.uk/" target="_top" rel="noopener">Daily Mirror</a>
+      <a href="https://www.dailystar.co.uk/" target="_top" rel="noopener">Daily Star</a>
+      <a href="https://news.google.co.uk/" target="_top" rel="noopener">Google News UK</a>
+      <a href="https://www.guardian.co.uk/" target="_top" rel="noopener">Guardian</a>
+      <a href="https://www.independent.co.uk/" target="_top" rel="noopener">Independent</a>
+      <a href="https://www.newsnow.co.uk/" target="_top" rel="noopener">NewsNow</a>
+      <a href="https://news.sky.com/" target="_top" rel="noopener">Sky News</a>
+      <a href="https://www.telegraph.co.uk/" target="_top" rel="noopener">Telegraph</a>
+      <a href="https://www.thesun.co.uk/" target="_top" rel="noopener">The Sun</a>
+      <a href="https://www.thetimes.co.uk/" target="_top" rel="noopener">Times</a>
+      <a href="https://abcnews.go.com/" target="_top" rel="noopener">ABC</a>
+      <a href="https://www.cbsnews.com/" target="_top" rel="noopener">CBS News</a>
+      <a href="https://www.chicagotribune.com/" target="_top" rel="noopener">Chicago Tribune</a>
+      <a href="https://www.cnn.com/" target="_top" rel="noopener">CNN</a>
+      <a href="https://www.denverpost.com/" target="_top" rel="noopener">Denver Post</a>
+      <a href="https://www.foxnews.com/" target="_top" rel="noopener">Fox News</a>
+      <a href="https://news.google.com/?hl=en-US&gl=US&ceid=US:en" target="_top" rel="noopener">Google News USA</a>
+      <a href="https://www.chron.com/" target="_top" rel="noopener">Houston Chronicle</a>
+      <a href="https://www.huffingtonpost.com/" target="_top" rel="noopener">Huffington Post</a>
+      <a href="https://www.latimes.com/" target="_top" rel="noopener">LA Times</a>
+      <a href="https://nypost.com/" target="_top" rel="noopener">N.Y. Post</a>
+      <a href="https://www.nytimes.com/" target="_top" rel="noopener">N.Y. Times</a>
+      <a href="https://www.nbcnews.com/" target="_top" rel="noopener">NBC</a>
+      <a href="https://www.newsday.com/" target="_top" rel="noopener">Newsday</a>
+      <a href="https://www.sfchronicle.com/" target="_top" rel="noopener">San Francisco Chronicle</a>
+      <a href="https://www.usatoday.com/" target="_top" rel="noopener">USA Today</a>
+      <a href="https://www.wsj.com/" target="_top" rel="noopener">Wall Street Journal</a>
+      <a href="https://www.washingtonpost.com/" target="_top" rel="noopener">Washington Post</a>
+      <a href="https://www.calgaryherald.com/" target="_top" rel="noopener">Calgary Herald</a>
+      <a href="https://www.cbc.ca/news" target="_top" rel="noopener">CBC News</a>
+      <a href="https://www.ctvnews.ca/" target="_top" rel="noopener">CTV News.ca</a>
+      <a href="https://www.theglobeandmail.com/" target="_top" rel="noopener">Globe &amp; Mail</a>
+      <a href="https://montrealgazette.com/" target="_top" rel="noopener">Montreal Gazette</a>
+      <a href="https://www.theprovince.com/" target="_top" rel="noopener">The Province</a>
+      <a href="https://www.torontosun.com/" target="_top" rel="noopener">Toronto Sun</a>
+      <a href="https://www.vancouversun.com/" target="_top" rel="noopener">Vancouver Sun</a>
+      <a href="https://www.ansa.it/english/" target="_top" rel="noopener">Ansa.it</a>
+      <a href="https://www.dw.com/" target="_top" rel="noopener">Deutsche Welle</a>
+      <a href="https://www.elpais.com/english/" target="_top" rel="noopener">El Pais</a>
+      <a href="https://www.france24.com/" target="_top" rel="noopener">France24</a>
+      <a href="https://en.interfax.com.ua/" target="_top" rel="noopener">Interfax Ukraine</a>
+      <a href="https://www.kyivpost.com/" target="_top" rel="noopener">Kiev Post</a>
+      <a href="https://www.praguepost.com/" target="_top" rel="noopener">Prague Post</a>
+      <a href="https://www.warsawvoice.pl/" target="_top" rel="noopener">Warsaw Voice</a>
+      <a href="https://www.thelocal.com/" target="_top" rel="noopener">The Local (Europe)</a>
+      <a href="https://www.euronews.com/" target="_top" rel="noopener">Euronews</a>
+      <a href="https://www.politico.eu/" target="_top" rel="noopener">POLITICO Europe</a>
+      <a href="https://euobserver.com/" target="_top" rel="noopener">EUobserver</a>
+      <a href="https://www.aljazeera.com/" target="_top" rel="noopener">Al Jazeera</a>
+      <a href="https://www.arabnews.com/" target="_top" rel="noopener">Arab News</a>
+      <a href="https://www.timesofindia.indiatimes.com/" target="_top" rel="noopener">Times of India</a>
+      <a href="https://www.scmp.com/" target="_top" rel="noopener">South China Morning Post</a>
+      <a href="https://www.japantimes.co.jp/" target="_top" rel="noopener">Japan Times</a>
+      <a href="https://www.koreatimes.co.kr/" target="_top" rel="noopener">Korea Times</a>
+      <a href="https://www.straitstimes.com/" target="_top" rel="noopener">Straits Times</a>
+      <a href="https://www.abc.net.au/news/" target="_top" rel="noopener">ABC Australia</a>
+      <a href="https://www.rnz.co.nz/news" target="_top" rel="noopener">RNZ (New Zealand)</a>
+      <a href="https://www.thejakartapost.com/" target="_top" rel="noopener">Jakarta Post</a>
+      <a href="https://www.bangkokpost.com/" target="_top" rel="noopener">Bangkok Post</a>
+      <a href="https://www.phnompenhpost.com/" target="_top" rel="noopener">Phnom Penh Post</a>
+      <a href="https://www.vietnamnews.vn/" target="_top" rel="noopener">Vietnam News</a>
+      <a href="https://www.dailymirror.lk/" target="_top" rel="noopener">Daily Mirror (Sri Lanka)</a>
+      <a href="https://www.dawn.com/" target="_top" rel="noopener">Dawn (Pakistan)</a>
+      <a href="https://www.khaleejtimes.com/" target="_top" rel="noopener">Khaleej Times</a>
+      <a href="https://gulfnews.com/" target="_top" rel="noopener">Gulf News</a>
+      <a href="https://www.thenationalnews.com/" target="_top" rel="noopener">The National (UAE)</a>
+      <a href="https://www.deccanchronicle.com/" target="_top" rel="noopener">Deccan Chronicle</a>
+      <a href="https://economictimes.indiatimes.com/" target="_top" rel="noopener">Economic Times</a>
+      <a href="https://www.deccanherald.com/" target="_top" rel="noopener">Herald</a>
+      <a href="https://www.hindustantimes.com/" target="_top" rel="noopener">Hindustan Times</a>
+      <a href="https://www.newindianexpress.com/" target="_top" rel="noopener">New Indian Express</a>
+      <a href="https://www.thehindu.com/" target="_top" rel="noopener">The Hindu</a>
+      <a href="https://indianexpress.com/" target="_top" rel="noopener">The Indian Express</a>
+      <a href="https://www.thestatesman.com/" target="_top" rel="noopener">The Statesman</a>
+      <a href="https://www.telegraphindia.com/" target="_top" rel="noopener">The Telegraph</a>
+      <a href="https://timesofindia.indiatimes.com/" target="_top" rel="noopener">Times of India</a>
+      <a href="https://www.thehindubusinessline.com/" target="_top" rel="noopener">Business Line (The Hindu)</a>
+      <a href="https://scroll.in/" target="_top" rel="noopener">Scroll.in</a>
+      <a href="https://thewire.in/" target="_top" rel="noopener">The Wire</a>
+      <a href="https://buenosairesherald.com/" target="_top" rel="noopener">Buenos Aires Herald</a>
+      <a href="https://www.latinamericanpost.com/" target="_top" rel="noopener">Latin American Post</a>
+      <a href="https://en.mercopress.com/" target="_top" rel="noopener">Merco Press</a>
+      <a href="https://mexiconewsdaily.com/" target="_top" rel="noopener">Mexico News Daily</a>
+      <a href="https://riotimesonline.com/" target="_top" rel="noopener">Rio Times</a>
+      <a href="https://ticotimes.net/" target="_top" rel="noopener">The Tico Times</a>
+      <a href="https://www.batimes.com.ar/" target="_top" rel="noopener">Buenos Aires Times</a>
+      <a href="https://santiagotimes.cl/" target="_top" rel="noopener">The Santiago Times</a>
+      <a href="https://perureports.com/" target="_top" rel="noopener">Peru Reports</a>
+      <a href="https://www.reuters.com/" target="_top" rel="noopener">Reuters (World)</a>
+      <a href="https://apnews.com/" target="_top" rel="noopener">Associated Press (AP)</a>
+      <a href="https://www.propublica.org/" target="_top" rel="noopener">ProPublica</a>
+      <a href="https://www.icij.org/" target="_top" rel="noopener">ICIJ (Investigative Journalism)</a>
+      <a href="https://news.mongabay.com/" target="_top" rel="noopener">Mongabay (Environment)</a>
+      <a href="https://www.climatechangenews.com/" target="_top" rel="noopener">Climate Home News</a>
+      <a href="https://www.nature.com/news/" target="_top" rel="noopener">Nature News</a>
+      <a href="https://www.sciencenews.org/" target="_top" rel="noopener">Science News</a>
+      <a href="https://theconversation.com/" target="_top" rel="noopener">The Conversation</a>
+      <a href="https://www.npr.org/sections/world/" target="_top" rel="noopener">NPR – World News</a>

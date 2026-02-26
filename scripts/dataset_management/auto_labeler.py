@@ -51,53 +51,97 @@ Nie dodawaj żadnego markdownu ani tekstu przed lub po JSONie. Uzasadnienie musi
             
             prompt = f"Oceń obiektywizm poniższego tekstu informacyjnego:\n\nTytuł: {article['title']}\nTreść: {text_snippet}\n..."
 
-            try:
-                response = client.chat.completions.create(
-                    model=args.model,
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": prompt}
-                    ],
-                    temperature=0.0,
-                    max_tokens=200
-                )
-                
-                content = response.choices[0].message.content.strip()
-                # Try to clean up if model chats too much (simple heuristic)
-                if "```json" in content:
-                    content = content.split("```json")[1].split("```")[0].strip()
-                elif "```" in content:
-                    content = content.split("```")[1].strip()
+            max_retries = 3
+            success = False
+            last_error = None
 
-                result = json.loads(content)
-                score = float(result.get('score', 0.0))
-                reason = result.get('reason', '')
-                
-                # Clamp score
-                score = max(-1.0, min(1.0, score))
+            for attempt in range(max_retries):
+                try:
+                    response = client.chat.completions.create(
+                        model=args.model,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": prompt}
+                        ],
+                        temperature=0.0,
+                    max_tokens=4096
+                    )
+                    
+                    content = response.choices[0].message.content.strip()
 
-                output_record = {
-                    'id': article['id'],
-                    'text': article['text'], # Keep full text
-                    'title': article['title'],
-                    'predicted_score': score,
-                    'predicted_reason': reason,
-                    'manual_score': None # Placeholder
-                }
-                
-                out_f.write(json.dumps(output_record, ensure_ascii=False) + "\n")
-                out_f.flush()
+                    # Clean up DeepSeek reasoning traces
+                    if "<think>" in content:
+                        content = content.split("</think>")[-1].strip()
 
-            except Exception as e:
-                # print(f"Error on {article['id']}: {e}")
-                # Write a failed record or just skip? 
-                # Let's write with error metadata
-                err_record = {
-                    'id': article['id'],
-                    'error': str(e)
-                }
-                # out_f.write(json.dumps(err_record) + "\n")
-                pass 
+                    # Robust JSON extraction
+                    import re
+                    
+                    def repair_json(json_str):
+                        # Attempt to fix common issues
+                        try:
+                            return json.loads(json_str)
+                        except json.JSONDecodeError:
+                            pass
+                        
+                        # 1. Try to find the first JSON-like object
+                        match = re.search(r'\{.*\}', json_str, re.DOTALL)
+                        if match:
+                            json_str = match.group(0)
+                        
+                        # 2. Handle unescaped quotes in value (heuristic)
+                        # This is tricky without a proper parser, but for simple {"key": "value"} we can try
+                        # to just accept it might fail or try simple replacements.
+                        # Using ast.literal_eval is risky but handles single quotes
+                        import ast
+                        try:
+                            return ast.literal_eval(json_str)
+                        except:
+                            pass
+
+                        # 3. Last ditch: Extract just the score if possible
+                        try:
+                            score_match = re.search(r'"score"\s*:\s*([-+]?\d*\.?\d+)', json_str)
+                            if score_match:
+                                return {"score": float(score_match.group(1)), "reason": "JSON_PARSE_ERROR_BUT_SCORE_SAVED: " + json_str[:50]}
+                        except:
+                            pass
+                            
+                        raise ValueError(f"Could not parse JSON: {json_str[:100]}...")
+
+                    if "```json" in content:
+                        content = content.split("```json")[1].split("```")[0].strip()
+                    elif "```" in content:
+                        content = content.split("```")[1].strip()
+ 
+                    try:
+                        result = repair_json(content)
+                    except ValueError:
+                        # If repair fails, let the retry loop handle it (it will be caught below)
+                        raise 
+
+                    score = float(result.get('score', 0.0))
+                    reason = result.get('reason', '')
+                    
+                    # Clamp score
+                    score = max(-1.0, min(1.0, score))
+
+                    output_record = {
+                        'id': article['id'],
+                        'text': article['text'], # Keep full text
+                        'title': article['title'],
+                        'predicted_score': score,
+                        'predicted_reason': reason,
+                        'manual_score': None # Placeholder
+                    }
+                    
+                    out_f.write(json.dumps(output_record, ensure_ascii=False) + "\n")
+                    out_f.flush()
+                    success = True
+                    break
+
+                except Exception as e:
+                    last_error = f"{str(e)} | Content snippet: {content[:50].replace(chr(10), ' ')}"
+                    time.sleep(1) # simple backoff 
                 
     print("Done.")
 

@@ -1,0 +1,1221 @@
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.tatsachen-ueber-deutschland.de/en"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">Facts about Germany</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.goethe.de/en/index.html"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">Goethe Institut</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.dw.com/en/top-stories/s-9097"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">Deutsche Welle</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://land-der-ideen.de/"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">Land der Ideen</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://germanyworks.com/"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">Germany Works.</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.ifa.de/"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">ifa</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.daad.de/de/"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">DAAD</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.alumniportal-deutschland.org/de/"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">Alumniportal Deutschland</span>
+											</a>
+										</li>
+																			<li class="burger-menu__item">
+											<a class="burger-menu__link  burger-menu__link--external " href="https://www.dandc.eu/de"   target="_blank" rel="noopener" >
+												<span class="burger-menu__label">E+Z</span>
+
+                                                
+
+
+
+<h2>Frankfurter Rundschau online</h2>
+
+<p>“Independent – but not neutral” is how the owner, publisher and editor Karl Gerold once defined the profile of the Frankfurter Rundschau (FR). Members of the editorial board of the left-liberal daily always felt a strong commitment to the principles of the welfare state and civil rights.</p>
+
+<p><a href="http://www.fr-online.de" target="_blank">www.fr-online.de</a></p>
+
+<h2>heute.de</h2>
+
+<p>What happened today? “heute” (today) – the news program broadcast by Germany’s Channel Two (ZDF – Zweites Deutsches Fernsehen) has been keeping German viewers up to date on what’s happening around the world for more than 50 years. The website www.heute.de is the online news and information service provided by ZDF.</p>
+
+<p><a href="http://www.heute.de" target="_blank">www.heute.de</a></p>
+
+<h2>SPIEGEL ONLINE</h2>
+
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+                <a href="http://zeit.de/">
+                  <h3 class="font-oswald text-sky-900">ZEIT</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">7</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://faz.net/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Frankfurter Allgemeine</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">8</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.focus.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">FOCUS</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">9</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.sueddeutsche.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Sueddeutsche.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">10</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://tagesschau.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">ARD Tagesschau</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">11</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://tagesspiegel.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Tagesspiegel</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">12</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.fr.de/">
+                  
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Frankfurter Rundschau</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">13</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.stern.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">STERN</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">14</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://derwesten.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">WAZ.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">15</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.express.de/">
+                  
+                    
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">EXPRESS</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">16</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.tz.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">TZ</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">17</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.hna.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">HNA.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">18</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://rp-online.de/">
+                  
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">RP ONLINE</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">19</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://taz.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">taz.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">20</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://morgenpost.de/">
+                  
+                    
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Berliner Morgenpost</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">21</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://berliner-zeitung.de/">
+                  
+                    
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Berliner Zeitung</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">22</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.augsburger-allgemeine.de/">
+                  
+                    
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Augsburger Allgemeine</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">23</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.presseportal.de/">
+                  
+                    
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Presseportal.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">24</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.bz-berlin.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">B.Z. Berlin</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">25</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.mopo.de/">
+                  
+                    
+                      
+   
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Hamburger Morgenpost</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">26</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.ksta.de/">
+                  
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Koelner Stadt-Anzeiger</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">27</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.swp.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Suedwest Presse Ulm</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">28</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://abendblatt.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Hamburger Abendblatt</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">29</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://suedkurier.de/">
+                  
+                    
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">SUEDKURIER Online</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">30</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.stuttgarter-zeitung.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Stuttgarter Zeitung</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">31</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.badische-zeitung.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Dadische Zeitung</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">32</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://thelocal.de/">
+                  
+                    
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">The Local</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">33</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.stuttgarter-nachrichten.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Stuttgarter Nachrichten</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">34</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.nordbayern.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Nordbayern.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">35</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.saechsische.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Saechsische Zeitung</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">36</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.noz.de/">
+                  
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Neue Osnabruecker Zeitung NOZ.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">37</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://abendzeitung-muenchen.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Abendzeitung Muenchen</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">38</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.freiepresse.de/">
+                  
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Freie Presse</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">39</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.haz.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">HAZ - Hannoversche Allgemeine</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">40</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.shz.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">shz.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">41</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://infranken.de/">
+                  
+                    
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">inFranken.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">42</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.weser-kurier.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">WESER-KURIER</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">43</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.schwaebische.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Schwaebische.de</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">44</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.schwarzwaelder-bote.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Schwarzwaelder Bote</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">45</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.nwzonline.de/">
+                  
+                    
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">NWZ Nordwest Zeitung</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">46</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.pnp.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Passauer Neue Presse</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">47</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="http://www.fnp.de/">
+                  
+                    
+                      
+
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Frankfurter Neue Presse</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">48</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.nw.de/">
+                  
+                    
+                      
+
+                    
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Neue Westfaelische</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">49</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://www.mittelbayerische.de/">
+                  
+                    
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Mittelbayerische Zeitung</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        
+        <div class="flex">
+           
+            <span class="font-sans flex-none w-8 h-8 text-white bg-yellow-500 font-bold pt-1 pl-2 mt-3 rounded-tl-md rounded-bl-md">50</span>
+          
+          <div class=" bg-white rounded-md shadow-md hover:shadow-lg transition-shadow overflow-hidden w-full">
+            <div class="p-4 flex">
+              <span  class="w-10"  >
+                <a href="https://mainpost.de/">
+                  
+                    
+                      
+
+                  
+                </a>
+              </span>
+              <div class="w-full my-auto">
+
+                  <h3 class="font-oswald text-sky-900">Main Post</h3>
+                </a>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      
+    </div>

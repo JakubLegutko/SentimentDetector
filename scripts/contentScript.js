@@ -13,10 +13,44 @@
   const TOKEN_REGEX = /\p{L}[\p{L}'-]+/gu;
 
   let lastAnalysis = null;
+  let isMinimized = false;
+  let scrollTimeout = null;
 
   const ui = createPanel();
 
   // --- Event Listeners ---
+
+  // Handle Scroll for Minimized Mode
+  window.addEventListener("scroll", () => {
+    if (!isMinimized) return;
+
+    if (scrollTimeout) clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      handleAutoAnalysis().catch(e => console.error("Auto-analysis failed", e));
+    }, 1000); // 1s debounce
+  });
+
+  // Handle Extension Icon Click
+  if (chrome.runtime?.onMessage) {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.type === "TOGGLE_PANEL") {
+        if (ui.panel) {
+          if (isMinimized || ui.panel.style.display === "none") {
+            // Restore
+            isMinimized = false;
+            ui.panel.style.display = ""; // Restore to css default
+            chrome.runtime.sendMessage({ type: "UPDATE_BADGE", data: { active: false } }).catch(() => { });
+          } else {
+            // Minimize
+            isMinimized = true;
+            ui.panel.style.display = "none";
+            chrome.runtime.sendMessage({ type: "UPDATE_BADGE", data: { active: false } }).catch(() => { });
+            handleAutoAnalysis();
+          }
+        }
+      }
+    });
+  }
 
   if (ui.selectionButton) {
     ui.selectionButton.addEventListener("click", () => {
@@ -95,14 +129,52 @@
     }
   }
 
+  async function handleAutoAnalysis() {
+    // Only analyze if the panel is minimized
+    if (!isMinimized) return;
+
+    // We want 1DCNN by default for the background analysis as requested
+    const prevModel = ui.modelSelector.value;
+    if (prevModel !== "1dcnn_objectivity_model") {
+      ui.modelSelector.value = "1dcnn_objectivity_model";
+      // This is background processing, so we await setModel but don't update panel status
+      try {
+        await window.ObjectivityAnalyzer.setModel("1dcnn_objectivity_model");
+      } catch (e) {
+        console.warn("Failed to set 1DCNN model for background auto-analysis.");
+        return;
+      }
+    }
+
+    const text = extractVisibleText(true); // pass true for 'onlyVisible'
+    if (!text || text.length < 50) return; // Ignore very short visible snips
+
+    try {
+      const result = await analyzeObjectivity(text);
+      if (result && chrome.runtime?.sendMessage) {
+        chrome.runtime.sendMessage({
+          type: "UPDATE_BADGE",
+          data: {
+            score: result.score,
+            label: result.label,
+            active: true
+          }
+        }).catch(() => { }); // catch errors usually caused by detached frame
+      }
+    } catch (error) {
+      console.warn("Auto-analysis error:", error);
+    }
+  }
+
   async function analyzeObjectivity(text) {
-    // Auto-translation step
-    // Auto-translation step (Skip for Gemini)
-    if (ui.modelSelector.value !== 'gemini' && window.ObjectivityAnalyzer && window.ObjectivityAnalyzer.translate) {
+    const modelKey = ui.modelSelector.value;
+
+    // Auto-translation step (Only for Vader now)
+    if (modelKey === 'vader' && window.ObjectivityAnalyzer && window.ObjectivityAnalyzer.translate) {
       try {
         const translated = await window.ObjectivityAnalyzer.translate(text);
         if (translated !== text) {
-          console.log("Text translated for analysis:", translated);
+          console.log("Text translated for Vader analysis:", translated);
           text = translated; // Swap text for the English version
         }
       } catch (e) {
@@ -110,7 +182,6 @@
       }
     }
 
-    const modelKey = ui.modelSelector.value;
     if (modelKey === 'vader') {
       // window.vader should be available.
       if (!window.vader) {
@@ -236,10 +307,19 @@
 
   // --- HTML Extraction & Filtering ---
 
-  function extractVisibleText() {
+  function extractVisibleText(onlyVisible = false) {
     const primaryNode = findPrimaryContentNode();
-    const cleaned = cleanNodeText(primaryNode);
+    const cleaned = cleanNodeText(primaryNode, onlyVisible);
     return cleaned.slice(0, MAX_TEXT_LENGTH);
+  }
+
+  function isNodeVisible(node) {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
+    const rect = node.getBoundingClientRect();
+    const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
+    // Check if the node is in the viewport (at least partially)
+    const isVisible = (rect.top <= windowHeight) && ((rect.top + rect.height) >= 0);
+    return isVisible;
   }
 
   function findPrimaryContentNode() {
@@ -271,8 +351,15 @@
     return document.body;
   }
 
-  function cleanNodeText(node) {
+  function cleanNodeText(node, onlyVisible = false) {
     if (!node) return "";
+
+    // We can't easily check visibility on a disconnected clone.
+    // So if onlyVisible is true, we traverse the real DOM first and gather text
+    if (onlyVisible) {
+      return gatherVisibleText(node);
+    }
+
     const clone = node.cloneNode(true);
     const NOISE_SELECTORS = [
       "nav",
@@ -305,6 +392,42 @@
 
     const text = clone.innerText || "";
     return text.replace(/\s+/g, " ").trim();
+  }
+
+  function gatherVisibleText(rootNode) {
+    let textArr = [];
+    let totalLength = 0;
+    const MAX_VISIBLE_LENGTH = 3000; // Limit text length for speed in minimized mode
+    const NOISE_SELECTORS = ["nav", "header", "footer", "aside", ".menu", ".sidebar", ".ad", ".ads", ".promo", "#comments"];
+
+    // basic walker
+    const walk = (node) => {
+      if (!node || totalLength >= MAX_VISIBLE_LENGTH) return;
+      if (node.nodeType === Node.TEXT_NODE) {
+        const trimmed = node.nodeValue.trim();
+        if (trimmed) {
+          textArr.push(trimmed);
+          totalLength += trimmed.length;
+        }
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+      const tag = node.tagName.toLowerCase();
+      if (["script", "style", "noscript", "template", "iframe", "svg"].includes(tag)) return;
+
+      // Skip noise by selector match if supported
+      if (node.matches && NOISE_SELECTORS.some(sel => node.matches(sel))) return;
+
+      if (!isNodeVisible(node)) return; // Skip if not visible in viewport
+
+      for (const child of node.childNodes) {
+        walk(child);
+      }
+    };
+
+    walk(rootNode);
+    return textArr.join(" ").replace(/\s+/g, " ").trim();
   }
 
   function getSelectionText() {
@@ -357,6 +480,20 @@
     selectionButton.textContent = "Sel";
     selectionButton.title = "Analyze selected text";
 
+    const minimizeButton = document.createElement("button");
+    minimizeButton.className = "panel-action minimize-btn";
+    minimizeButton.textContent = "Tray";
+    minimizeButton.title = "Minimize to tray and auto-analyze on scroll";
+    minimizeButton.onclick = () => {
+      isMinimized = true;
+      panel.style.display = "none";
+      // Clear badge in case they want a fresh start, or trigger an initial analysis
+      if (chrome.runtime?.sendMessage) {
+        chrome.runtime.sendMessage({ type: "UPDATE_BADGE", data: { active: false } }).catch(() => { });
+      }
+      handleAutoAnalysis(); // Trigger one immediately
+    };
+
     const toggleButton = document.createElement("button");
     toggleButton.className = "panel-toggle";
     toggleButton.textContent = "–";
@@ -365,7 +502,7 @@
       toggleButton.textContent = panel.classList.contains("collapsed") ? "+" : "–";
     };
 
-    actions.append(modelSelector, detailsButton, pageButton, selectionButton, toggleButton);
+    actions.append(modelSelector, detailsButton, pageButton, selectionButton, minimizeButton, toggleButton);
     header.append(titleBlock, actions);
 
     const body = document.createElement("div");

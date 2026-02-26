@@ -143,10 +143,18 @@
   color: #cbd5e1;
 }
 
+.analysis-details {
+  display: none;
+}
+
+#sentiment-detector-panel.details-open .analysis-details {
+  display: block;
+}
+
 #sentiment-detector-panel.collapsed .panel-body,
 #sentiment-detector-panel.collapsed .selection-report,
 #sentiment-detector-panel.collapsed .analysis-details {
-  display: none;
+  display: none !important;
 }
 
 .selection-summary {

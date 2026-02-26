@@ -2,28 +2,26 @@
 (function () {
   // Available models
   const MODELS = {
-    "deberta-zero-shot": {
-      id: "Xenova/nli-deberta-v3-base",
-      type: "zero-shot-classification",
-      labels: ["objective", "subjective"],
-      name: "English (Deberta v3)"
+    "deberta_objectivity": {
+      id: "deberta_objectivity",
+      type: "text-classification",
+      name: "Fine-Tuned DeBERTa",
+      quantized: false
     },
-    "bert-base": {
-      id: "Xenova/bert-base-uncased",
-      type: "feature-extraction",
-      name: "BERT Base (Uncased)"
-    },
-    "distilbert-subjectivity": {
-      id: "distilbert-subjectivity", // Matches the folder name in models/
-      type: "text-classification",   // It is now a classifier, not zero-shot
-      labels: ["subjective", "objective"], // Label 0, Label 1 mapping
-      name: "Fine-Tuned Subjectivity",
-      quantized: false // We exported as standard ONNX (float32), not quantized
+    "1dcnn_objectivity_model": {
+      id: "1dcnn_objectivity_model",
+      type: "custom",
+      name: "1DCNN Objectivity"
     },
     "gemini": {
       id: "gemini-2.5-flash",
       type: "llm",
       name: "LLM (Gemini)"
+    },
+    "local_llm": {
+      id: "local_llm",
+      type: "llm",
+      name: "Local LLM"
     }
 
   };
@@ -31,7 +29,7 @@
   const USE_LOCAL_SERVER = true;
   const SERVER_URL = "http://localhost:8000";
 
-  let currentModelKey = "deberta-zero-shot";
+  let currentModelKey = "deberta_objectivity";
   let pipelinePromise = null;
   let activePipeline = null;
 
@@ -103,22 +101,29 @@
           payload.api_key = sessionApiKey;
         }
 
-        const response = await fetch(`${SERVER_URL}/analyze`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
+        let responseWrapper;
+        try {
+          responseWrapper = await chrome.runtime.sendMessage({
+            type: "FETCH_API",
+            endpoint: "/analyze",
+            payload: payload
+          });
+          if (responseWrapper.error) {
+            throw new Error(responseWrapper.error);
+          }
+        } catch (fetchErr) {
+          console.error("Network or Extension error during background fetch:", fetchErr);
+          throw new Error("Failed to connect to local server at 127.0.0.1:8000 via background.");
+        }
 
-        if (!response.ok) {
-          let errorMsg = "Server returned " + response.status;
+        if (!responseWrapper.ok) {
+          let errorMsg = "Server returned " + responseWrapper.status;
           let detail = "";
-          try {
-            const errData = await response.json();
-            if (errData.detail) {
-              errorMsg += ": " + errData.detail;
-              detail = errData.detail;
-            }
-          } catch (e) { /* ignore parse error */ }
+
+          if (responseWrapper.data && responseWrapper.data.detail) {
+            errorMsg += ": " + responseWrapper.data.detail;
+            detail = responseWrapper.data.detail;
+          }
 
           // Check for missing API key error
           if (currentModelKey === "gemini" && (detail.includes("GEMINI_API_KEY") || response.status === 500)) {
@@ -131,17 +136,13 @@
 
           throw new Error(errorMsg);
         }
-        const result = await response.json();
+
+        const result = responseWrapper.data;
         console.log("SERVER RESPONSE:", result);
 
         // Handle Response based on Model Type
-        if (currentModelKey === "deberta-zero-shot") {
-          // Server returns { labels: [...], scores: [...] }
-          const subjectiveIdx = result.labels.indexOf("subjective");
-          const objectiveIdx = result.labels.indexOf("objective");
-          const subjectiveScore = result.scores[subjectiveIdx];
-          const objectiveScore = result.scores[objectiveIdx];
-          const finalScore = (objectiveScore - subjectiveScore) * 100;
+        if (currentModelKey === "deberta_objectivity") {
+          const finalScore = result.score * 100; // -1 to 1 mapped to -100 to 100
           return {
             score: finalScore,
             label: finalScore > 0 ? "Objective" : "Subjective",
@@ -149,7 +150,15 @@
             model: "Local Server (DeBERTa)",
             provider: "server"
           };
-
+        } else if (currentModelKey === "1dcnn_objectivity_model") {
+          const finalScore = result.score * 100;
+          return {
+            score: finalScore,
+            label: finalScore > 0 ? "Objective" : "Subjective",
+            confidence: Math.abs(finalScore),
+            model: "Local Server (1DCNN)",
+            provider: "server"
+          };
         } else if (currentModelKey === "gemini") {
           // Gemini returns { score: -1 to 1, explanation: "..." }
           // UI expects score of -100 to 100
@@ -159,6 +168,17 @@
             label: result.label, // "Objective" or "Subjective"
             confidence: Math.abs(finalScore),
             model: "Gemini 2.5 Flash",
+            provider: "server-llm",
+            explanation: result.explanation
+          }
+        } else if (currentModelKey === "local_llm") {
+          // Same format as Gemini
+          const finalScore = result.score * 100;
+          return {
+            score: finalScore,
+            label: result.label,
+            confidence: Math.abs(finalScore),
+            model: "Local LLM",
             provider: "server-llm",
             explanation: result.explanation
           }
@@ -172,43 +192,7 @@
           };
         }
 
-        // Default: Fine-Tuned Subjectivity (DistilBERT)
-        // Map Python output to JS expected format
-        // Python: { label: 'LABEL_0', score: 0.99 } or { label: 'subjective', score: ... }
-
-        // Result is now an array of [{label, score}, {label, score}] due to top_k=None
-        let subjectiveScore = 0;
-        let objectiveScore = 0;
-
-        if (Array.isArray(result)) {
-          result.forEach(item => {
-            if (item.label === "LABEL_0" || item.label === "subjective") {
-              subjectivityLabelFound = true;
-              subjectiveScore = item.score;
-            } else if (item.label === "LABEL_1" || item.label === "objective") {
-              objectiveScore = item.score;
-            }
-          });
-        } else {
-          // Fallback for single object (legacy)
-          if (result.label === "LABEL_0" || result.label === "subjective") {
-            subjectiveScore = result.score;
-            objectiveScore = 1 - result.score;
-          } else {
-            objectiveScore = result.score;
-            subjectiveScore = 1 - result.score;
-          }
-        }
-
-        const finalScore = (objectiveScore - subjectiveScore) * 100;
-
-        return {
-          score: finalScore,
-          label: finalScore > 0 ? "Objective" : "Subjective",
-          confidence: Math.abs(finalScore),
-          model: "Local Server (DistilBERT)",
-          provider: "server"
-        };
+        // No fallback models here
       } catch (e) {
         console.error("Server analysis failed, falling back to browser if possible", e);
         // Fallback or throw? Let's throw for now to see errors clearly.
@@ -329,16 +313,18 @@
     // 1. Local Server Mode
     if (USE_LOCAL_SERVER) {
       try {
-        const response = await fetch(`${SERVER_URL}/translate`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: text })
+        const responseWrapper = await chrome.runtime.sendMessage({
+          type: "FETCH_API",
+          endpoint: "/translate",
+          payload: { text: text }
         });
-        if (!response.ok) throw new Error("Server translation error " + response.status);
-        const result = await response.json();
-        return result.translated_text;
+
+        if (responseWrapper.error) throw new Error(responseWrapper.error);
+        if (!responseWrapper.ok) throw new Error("Server translation error " + responseWrapper.status);
+
+        return responseWrapper.data.translated_text;
       } catch (e) {
-        console.warn("Server translation failed", e);
+        console.warn("Server translation failed via background", e);
         return text;
       }
     }

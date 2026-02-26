@@ -1,4 +1,3 @@
-
 import argparse
 from datasets import load_dataset
 from transformers import (
@@ -83,16 +82,45 @@ def main():
 
     # Load tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
-    model = AutoModelForSequenceClassification.from_pretrained(args.model_name, num_labels=2) # Assuming 2 labels for sentiment (positive/negative)
+    # Regression task (1 label)
+    model = AutoModelForSequenceClassification.from_pretrained(args.model_name, num_labels=1)
 
     # Load dataset
-    dataset = load_dataset(args.dataset_name)
+    if args.dataset_name.endswith('.json'):
+        import json
+        with open(args.dataset_name, 'r', encoding='utf-8') as f:
+            raw_data = json.load(f)
+            
+        texts = []
+        labels = []
+        for item in raw_data:
+            if 'text' in item and 'predicted_score' in item and item['predicted_score'] is not None:
+                texts.append(item['text'])
+                labels.append(float(item['predicted_score']))
+                
+        # Split into train and eval (80/20)
+        from sklearn.model_selection import train_test_split
+        train_texts, val_texts, train_labels, val_labels = train_test_split(texts, labels, test_size=0.2, random_state=42)
+        
+        from datasets import Dataset, DatasetDict
+        train_dataset = Dataset.from_dict({'text': train_texts, 'label': train_labels})
+        val_dataset = Dataset.from_dict({'text': val_texts, 'label': val_labels})
+        dataset = DatasetDict({'train': train_dataset, 'test': val_dataset})
+    else:
+        dataset = load_dataset(args.dataset_name)
 
     # Preprocess the dataset
     def preprocess_function(examples):
-        return tokenizer(examples["text"], truncation=True, padding="max_length")
+        # Use simple truncation. We will handle dynamic padding using a DataCollator
+        # DeBERTa-v3 base is pretrained on max 512 length. Exceeding this drastically increases memory.
+        return tokenizer(examples["text"], truncation=True, max_length=512)
 
     tokenized_datasets = dataset.map(preprocess_function, batched=True)
+
+    from transformers import DataCollatorWithPadding
+    data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+
+    # Note: transformers Trainer automatically expects the target to be named "label" or "labels" for MSELoss regression when num_labels=1
 
     # Set up training arguments
     training_args = TrainingArguments(
@@ -106,7 +134,8 @@ def main():
         fp16=args.fp16,
         save_strategy="epoch",
         load_best_model_at_end=True if args.eval_strategy != "no" else False,
-        metric_for_best_model="accuracy" if args.eval_strategy != "no" else None,
+        metric_for_best_model="eval_loss" if args.eval_strategy != "no" else None, # Evaluate using loss for regression
+        greater_is_better=False,
     )
 
     # Define the trainer
@@ -115,6 +144,7 @@ def main():
         args=training_args,
         train_dataset=tokenized_datasets["train"],
         eval_dataset=tokenized_datasets["test"],
+        data_collator=data_collator,
     )
 
     # Train the model

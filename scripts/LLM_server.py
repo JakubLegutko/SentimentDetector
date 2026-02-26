@@ -33,11 +33,11 @@ except ImportError:
 
 # Define available models (GGUF format for GTX 1080 8GB)
 # We use Q4_K_M quantization which is a good balance of size/speed/perplexity
-MODELS = {
+MODEL_REGISTRY = {
     "bielik": {
-        "repo": "speakleash/Bielik-7B-Instruct-v0.1-GGUF",
-        "filename": "bielik-7b-instruct-v0.1.Q4_K_M.gguf",
-        "description": "Bielik 7B v0.1 - Specialized for Polish."
+        "repo": "speakleash/Bielik-11B-v3.0-Instruct-GGUF",
+        "filename": "Bielik-11B-v3.0-Instruct.Q4_K_M.gguf",
+        "description": "Bielik 11B v3.0 - Specialized for Polish."
     },
     "llama3": {
         "repo": "QuantFactory/Meta-Llama-3-8B-Instruct-GGUF",
@@ -45,11 +45,17 @@ MODELS = {
         "description": "Meta Llama 3 8B Instruct - Strong general capability."
     },
     "mistral": {
-        "repo": "MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF",
-        "filename": "Mistral-7B-Instruct-v0.3.Q4_K_M.gguf",
-        "description": "Mistral 7B v0.3 - Reliable and efficient."
+        "repo": "TheBloke/OpenHermes-2.5-Mistral-7B-GGUF",
+        "filename": "openhermes-2.5-mistral-7b.Q4_K_M.gguf",
+        "description": "OpenHermes 2.5 (Mistral 7B) - Excellent instruction following."
+    },
+    "deepseek": {
+        "repo": "bartowski/DeepSeek-R1-Distill-Llama-8B-GGUF",
+        "filename": "DeepSeek-R1-Distill-Llama-8B-Q4_K_M.gguf",
+        "description": "DeepSeek R1 Distill Llama 8B - Strong reasoning model."
     }
 }
+MODELS = MODEL_REGISTRY
 
 app = FastAPI(title="Local LLM Server")
 
@@ -147,7 +153,7 @@ def main():
     parser.add_argument("--host", type=str, default="0.0.0.0", help="Host address")
     parser.add_argument("--port", type=int, default=11434, help="Port (defaults to 11434 to match Ollama)")
     parser.add_argument("--n-gpu-layers", type=int, default=-1, help="Number of layers to offload to GPU (-1 for all)")
-    parser.add_argument("--ctx-size", type=int, default=2048, help="Context size")
+    parser.add_argument("--ctx-size", type=int, default=12000, help="Context size")
 
     args = parser.parse_args()
 
