@@ -32,9 +32,6 @@ def main():
         model.save_pretrained(OUTPUT_MODEL_DIR)
         tokenizer.save_pretrained(OUTPUT_MODEL_DIR)
         
-        # transformers.js expects specific filenames sometimes, but standard ONNX export usually works.
-        # We might need to ensure quantization if file size is an issue, but let's start with standard export.
-        
         print(f"Success! Model exported to {OUTPUT_MODEL_DIR}")
         print("You can now select 'DistilBERT Subjectivity' in the extension.")
 

@@ -62,8 +62,6 @@ def consolidate_datasets(input_files: List[str], average_output: str, manual_out
         
         # Extract LLM name from filename (e.g., "dataset_labeled_bielik-2.json" -> "bielik-2")
         filename = os.path.basename(filepath)
-        # Assuming format like "dataset_labeled_{llm_name}.json" or just "{llm_name}.json"
-        # Let's try to be smart but simple: remove extension, relieve 'dataset_labeled_' prefix if present
         name_part = os.path.splitext(filename)[0]
         if name_part.startswith("dataset_labeled_"):
             llm_name = name_part.replace("dataset_labeled_", "")

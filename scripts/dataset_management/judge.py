@@ -76,12 +76,6 @@ class LLMJudge:
                     except json.JSONDecodeError:
                         pass # Fall through to fallback
                 
-                # Fallback extraction logic...
-                # (Same as before)
-                
-                # ... (re-implement fallback here or structure to avoid code dup, but for now inline is fine or return None to loop?) 
-                # Actually let's just use the robust fallback here too.
-                
                 print(f"Warning: Could not parse JSON. Attempting fallback extraction. Content end:\n...{content[-500:]}", file=sys.stderr)
                 model_matches = re.findall(r'[\"\']?best_model[\"\']?\s*:\s*[\"\']([^\"\']+)[\"\']', content)
                 if model_matches:
@@ -92,9 +86,7 @@ class LLMJudge:
                         "choice_reason": "Response was truncated or malformed. Extracted via regex."
                     }
                 
-                return None # Failed this attempt, but code structure returns None anyway, maybe retry logic should only handle exceptions?
-                # If we got a response but couldn't parse it, retrying likely won't help unless temp > 0. 
-                # But if it's a server error, we retry.
+                return None 
 
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 500:

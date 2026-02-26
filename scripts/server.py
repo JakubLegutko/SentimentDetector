@@ -295,9 +295,6 @@ def translate(request: TranslationRequest):
         return {"translated_text": request.text}
 
     try:
-        # Increase max_length as requested by user, but enable truncation for the input
-        # Note: NLLB max position embeddings is usually 1024.
-        # We also truncate the input string to avoid extreme cases that might bypass tokenizer limits or cause OOM.
         safe_text_input = request.text[:5000] 
         output = translation_pipeline(safe_text_input, src_lang=src_lang, tgt_lang=request.tgt_lang, max_length=1024, truncation=True)
         # output is [{'translation_text': '...'}]
