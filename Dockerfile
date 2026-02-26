@@ -10,24 +10,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-RUN pip install --no-cache-dir \
-    fastapi \
-    uvicorn \
-    torch \
-    transformers \
-    datasets \
-    sentencepiece \
-    langdetect \
-    protobuf \
-    accelerate \
-    google-generativeai \
-    python-dotenv
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire workspace into the container
 COPY . /app
 
-# Expose port 8000 for the API
-EXPOSE 8000
+# Ensure the start script is executable
+RUN chmod +x ./scripts/start.sh
 
-# Run the server
-CMD ["uvicorn", "scripts.server:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expose port 8000 for the API and 11434 for the LLM server
+EXPOSE 8000
+EXPOSE 11434
+
+# Run the startup script
+CMD ["./scripts/start.sh"]

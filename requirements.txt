@@ -10,3 +10,8 @@ protobuf
 accelerate
 google-generativeai
 python-dotenv
+llama-cpp-python
+huggingface-hub
+cloudscraper
+beautifulsoup4
+readability-lxml

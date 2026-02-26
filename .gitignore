@@ -15,12 +15,13 @@ env/
 models/
 distilbert_subjectivity_v1/
 sentiment_model/
+scripts/scraper/scrapper/
 *.safetensors
 *.bin
 *.onnx
 datasets/
 Lexicon/
-
+logs/
 # Secrets
 .env
 
