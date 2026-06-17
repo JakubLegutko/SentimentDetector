@@ -6,9 +6,21 @@ import torch
 import google.generativeai as genai
 import os
 import json
+import time
+import csv
+import psutil
+import pynvml
+from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv() # Load env vars from .env file
+
+pynvml_initialized = False
+try:
+    pynvml.nvmlInit()
+    pynvml_initialized = True
+except Exception as e:
+    print(f"Warning: pynvml initialization failed (GPU telemetry won't be available): {e}")
 
 app = FastAPI()
 
@@ -29,9 +41,11 @@ TRANSLATION_MODEL_ID = "facebook/nllb-200-distilled-600M"
 
 import sys
 sys.path.append(os.path.join(PROJECT_ROOT, "scripts"))
+sys.path.append(os.path.join(PROJECT_ROOT, "scripts", "model_tuner"))
 try:
     from train_1dcnn import Text1DCNN
-except ImportError:
+except ImportError as e:
+    print(f"Import error: {e}")
     Text1DCNN = None
 import re
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
@@ -95,6 +109,50 @@ class TranslationRequest(BaseModel):
     src_lang: str = "auto"
     tgt_lang: str = "eng_Latn"
 
+class TelemetryRequest(BaseModel):
+    model: str
+    input_length: int
+    latency: float
+    token_usage: int = 0
+    label: str
+    score: float
+    cpu_percent: float = 0.0
+    memory_percent: float = 0.0
+    gpu_percent: float = 0.0
+    gpu_memory_percent: float = 0.0
+
+def log_telemetry(data: dict):
+    logs_dir = os.path.join(PROJECT_ROOT, "logs")
+    os.makedirs(logs_dir, exist_ok=True)
+    
+    csv_file = os.path.join(logs_dir, "telemetry.csv")
+    jsonl_file = os.path.join(logs_dir, "telemetry.log")
+    
+    data["timestamp"] = datetime.now().isoformat()
+    
+    try:
+        with open(jsonl_file, "a", encoding="utf-8") as f:
+            f.write(json.dumps(data) + "\n")
+    except Exception as e:
+        print(f"Error writing JSONL telemetry: {e}")
+        
+    fieldnames = ["timestamp", "model", "input_length", "latency", "token_usage", "label", "score", "cpu_percent", "memory_percent", "gpu_percent", "gpu_memory_percent"]
+    file_exists = os.path.isfile(csv_file)
+    try:
+        with open(csv_file, "a", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+            if not file_exists:
+                writer.writeheader()
+            writer.writerow(data)
+    except Exception as e:
+        print(f"Error writing CSV telemetry: {e}")
+
+@app.post("/telemetry")
+def submit_telemetry(request: TelemetryRequest):
+    log_telemetry(request.model_dump())
+    return {"status": "ok"}
+
+
 @app.get("/")
 def read_root():
     return {
@@ -108,6 +166,25 @@ def read_root():
 
 @app.post("/analyze")
 def analyze(request: TextRequest):
+    start_time = time.time()
+    cpu_percent = psutil.cpu_percent(interval=None)
+    mem_percent = psutil.virtual_memory().percent
+    
+    gpu_percent = 0.0
+    gpu_memory_percent = 0.0
+    if pynvml_initialized:
+        try:
+            handle = pynvml.nvmlDeviceGetHandleByIndex(0)
+            util = pynvml.nvmlDeviceGetUtilizationRates(handle)
+            gpu_percent = float(util.gpu)
+            mem_info = pynvml.nvmlDeviceGetMemoryInfo(handle)
+            gpu_memory_percent = float(mem_info.used) / float(mem_info.total) * 100.0
+        except Exception:
+            pass
+            
+    input_length = len(request.text)
+    token_usage = 0
+
     selected_model = request.model
     
     # Truncate text to avoid token limits crashes if truncation=True doesn't catch it perfectly
@@ -120,6 +197,9 @@ def analyze(request: TextRequest):
         # DeBERTa max is 512. We enable truncation.
         results = deberta_classifier(truncated_text, truncation=True, max_length=512)
         
+        # Estimate token usage via tokenizer
+        token_usage = len(deberta_tokenizer(truncated_text, truncation=True, max_length=512)["input_ids"])
+        
         # Results is usually [[{'label': 'LABEL_0', 'score': 0.123}]] due to top_k=None or single output
         score_val = 0.0
         if isinstance(results, list) and len(results) > 0:
@@ -130,8 +210,17 @@ def analyze(request: TextRequest):
         elif isinstance(results, dict):
             score_val = results.get('score', 0)
             
+        latency = time.time() - start_time
+        label = "Objective" if score_val > 0 else "Subjective"
+        log_telemetry({
+            "model": "DeBERTa Objectivity", "input_length": input_length, "latency": latency, 
+            "token_usage": token_usage, "label": label, "score": score_val, 
+            "cpu_percent": cpu_percent, "memory_percent": mem_percent,
+            "gpu_percent": gpu_percent, "gpu_memory_percent": gpu_memory_percent
+        })
+        
         return {
-            "label": "Objective" if score_val > 0 else "Subjective",
+            "label": label,
             "score": score_val,
             "model": "DeBERTa Objectivity"
         }
@@ -142,6 +231,7 @@ def analyze(request: TextRequest):
         
         # Tokenize and encode
         tokens = re.findall(r'\b\S+\b', request.text.lower())
+        token_usage = len(tokens)
         encoded = [cnn_vocab.get(word, cnn_vocab['<UNK>']) for word in tokens]
         
         # Pad sequence horizontally if it's too short for max filter size
@@ -154,8 +244,17 @@ def analyze(request: TextRequest):
         with torch.no_grad():
             prediction = cnn_model(tensor).item()
             
+        latency = time.time() - start_time
+        label = "Objective" if prediction > 0 else "Subjective"
+        log_telemetry({
+            "model": "1DCNN Objectivity", "input_length": input_length, "latency": latency, 
+            "token_usage": token_usage, "label": label, "score": prediction, 
+            "cpu_percent": cpu_percent, "memory_percent": mem_percent,
+            "gpu_percent": gpu_percent, "gpu_memory_percent": gpu_memory_percent
+        })
+            
         return {
-            "label": "Objective" if prediction > 0 else "Subjective",
+            "label": label,
             "score": prediction,
             "model": "1DCNN Objectivity"
         }
@@ -183,17 +282,27 @@ You must return the response in strict JSON format:
             response = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
             output = json.loads(response.text)
             
+            # Extract token usage
+            if hasattr(response, "usage_metadata") and response.usage_metadata:
+                token_usage = response.usage_metadata.prompt_token_count + response.usage_metadata.candidates_token_count
+            
+            latency = time.time() - start_time
+            label = "Objective" if output["score"] > 0 else "Subjective"
+            log_telemetry({
+                "model": "Gemini 1.5 Flash", "input_length": input_length, "latency": latency, 
+                "token_usage": token_usage, "label": label, "score": output["score"], 
+                "cpu_percent": cpu_percent, "memory_percent": mem_percent,
+                "gpu_percent": gpu_percent, "gpu_memory_percent": gpu_memory_percent
+            })
+            
             return {
-                "label": "Objective" if output["score"] > 0 else "Subjective",
+                "label": label,
                 "score": output["score"], # Raw -1 to 1
                 "explanation": output["explanation"],
                 "model": "Gemini 1.5 Flash"
             }
 
         except Exception as e:
-            print(f"Gemini API Error: {e}")
-            raise HTTPException(status_code=500, detail=f"Gemini Analysis Failed: {str(e)}")
-    
             print(f"Gemini API Error: {e}")
             raise HTTPException(status_code=500, detail=f"Gemini Analysis Failed: {str(e)}")
 
@@ -229,6 +338,9 @@ You must return the response in strict JSON format:
             result = response.json()
             content = result['choices'][0]['message']['content'].strip()
             
+            if "usage" in result:
+                token_usage = result["usage"].get("total_tokens", 0)
+            
             # Basic cleanup (similar to auto_labeler)
             if "<think>" in content:
                 content = content.split("</think>")[-1].strip()
@@ -239,8 +351,17 @@ You must return the response in strict JSON format:
                 
             output = json.loads(content)
             
+            latency = time.time() - start_time
+            label = "Objective" if output["score"] > 0 else "Subjective"
+            log_telemetry({
+                "model": "Local LLM", "input_length": input_length, "latency": latency, 
+                "token_usage": token_usage, "label": label, "score": output["score"], 
+                "cpu_percent": cpu_percent, "memory_percent": mem_percent,
+                "gpu_percent": gpu_percent, "gpu_memory_percent": gpu_memory_percent
+            })
+            
             return {
-                "label": "Objective" if output["score"] > 0 else "Subjective",
+                "label": label,
                 "score": output["score"],
                 "explanation": output["explanation"],
                 "model": "Local LLM"

@@ -8,6 +8,16 @@ langdetect
 requests
 protobuf
 accelerate
+fastapi
+uvicorn
+torch
+transformers
+datasets
+sentencepiece
+langdetect
+requests
+protobuf
+accelerate
 google-generativeai
 python-dotenv
 llama-cpp-python
@@ -15,3 +25,5 @@ huggingface-hub
 cloudscraper
 beautifulsoup4
 readability-lxml
+psutil
+pynvml

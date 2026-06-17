@@ -166,8 +166,19 @@
     }
   }
 
+  function sendTelemetry(data) {
+    if (chrome.runtime?.sendMessage) {
+        chrome.runtime.sendMessage({
+            type: "FETCH_API",
+            endpoint: "/telemetry",
+            payload: data
+        }).catch(e => console.warn("Telemetry error:", e));
+    }
+  }
+
   async function analyzeObjectivity(text) {
     const modelKey = ui.modelSelector.value;
+    const startTime = performance.now();
 
     // Auto-translation step (Only for Vader now)
     if (modelKey === 'vader' && window.ObjectivityAnalyzer && window.ObjectivityAnalyzer.translate) {
@@ -213,7 +224,7 @@
         }
       });
 
-      return {
+      const resultObj = {
         score: score,
         label: score > 0 ? "Objective" : "Subjective",
         confidence: Math.abs(score),
@@ -224,7 +235,19 @@
           subjectiveCount: subjectiveCount,
           totalCount: tokens.length
         }
-      }
+      };
+      
+      const latency = (performance.now() - startTime) / 1000;
+      sendTelemetry({
+          model: "Vader",
+          input_length: text.length,
+          latency: latency,
+          token_usage: tokens.length,
+          label: resultObj.label,
+          score: resultObj.score
+      });
+      
+      return resultObj;
     }
     // 1. Try Transformer Model
     if (window.ObjectivityAnalyzer) {
@@ -244,7 +267,7 @@
     // lexResult.objectivityScore is 0..1+ (0.5 neutral)
     const fallBackScore = (lexResult.objectivityScore - 0.5) * 200;
 
-    return {
+    const resultObj = {
       score: fallBackScore,
       label: fallBackScore > 0 ? "Objective" : "Subjective",
       confidence: Math.abs(fallBackScore),
@@ -252,6 +275,18 @@
       provider: "lexicon",
       lexiconStats: lexResult
     };
+    
+    const latency = (performance.now() - startTime) / 1000;
+    sendTelemetry({
+        model: "Lexicon (Fallback)",
+        input_length: text.length,
+        latency: latency,
+        token_usage: lexResult.totalCount,
+        label: resultObj.label,
+        score: resultObj.score
+    });
+
+    return resultObj;
   }
 
 

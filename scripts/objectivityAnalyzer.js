@@ -167,7 +167,7 @@
             score: finalScore,
             label: result.label, // "Objective" or "Subjective"
             confidence: Math.abs(finalScore),
-            model: "Gemini 2.5 Flash",
+            model: "Gemini 1.5 Flash",
             provider: "server-llm",
             explanation: result.explanation
           }
